@@ -1,0 +1,124 @@
+<div ng-controller="ownersCtrl">
+	<div class="form-title">
+		{{::trans('OwnedCompanies')}}
+	</div>
+	<ax-grid config="launcher.dataTable1"
+				api-controller="owners"
+				load-data-responses="companies=>companies"
+				order-by="nameInvariant"
+				item-id-field="id"
+				edit-row="editor"
+				apply-changes-on-save="false"
+				auto-focus="true"
+				customizable-freezed-columns="false"
+				customizable-config="true"
+				customizable-edit-mode="false"
+				ng-style="{'top':(dataStore.formTitleHeight()+10)+'px'}"
+				style="left:10px;right:10px;bottom:10px;">
+		<ax-toolbar min-width="660">
+			<ax-button button-type="refresh"></ax-button>
+			<ax-button button-type="settings" toolbar="right"></ax-button>
+		</ax-toolbar>
+		<ax-grid-editor width="520px"
+							 position="right"
+							 editor-title="trans:OwnedCompany"
+							 cols-width="190px,100%"
+							 show-fields-errors-as="text"
+							 group-controls-in-sections="false"
+							 toolbar-ax-scroller="true"
+							 initial-state="visible"></ax-grid-editor>
+		<ax-column header="trans:Company"
+					  bind-to="companyId"
+					  sortable="nameInvariant"
+					  width="300px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-view view-type="text" bind-to="name"></ax-column-view>
+			<ax-column-edit edit-type="autocomplete"
+								 datasource="$ctrl.$parent.companies"
+								 item-id-field="id"
+								 item-display-field="name"
+								 item-invariant-field="nameInvariant"
+								 link-popup-template-url="'/app-modules/invoicing/companies/companies-popup.html'"
+								 link-popup-caret-class="fa fa-edit"
+								 link-popup-ctrl="$parent.$ctrl.$parent.companiesEdit"
+								 link-popup-popup-height="305px"
+								 link-popup-popup-width="800px"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:SocialCapital"
+					  hideable="false"
+					  bind-to="socialCapital"
+					  edit-type="text"
+					  width="150px">
+		</ax-column>
+		<ax-column header="trans:ContactPhone"
+					  hideable="false"
+					  bind-to="contactPhone"
+					  edit-type="text"
+					  width="250px">
+		</ax-column>
+		<ax-column header="trans:ContactEmail"
+					  hideable="false"
+					  bind-to="contactEmail"
+					  edit-type="text"
+					  width="250px">
+		</ax-column>
+		<ax-column header="trans:VatRegistration"
+					  hideable="false"
+					  bind-to="vatRegistred"
+					  view-type="boolean-checkbox"
+					  edit-type="checkbox"
+					  double-binding="true"
+					  width="150px">
+		</ax-column>
+		<ax-column header="trans:Currencies"
+					  hideable="false"
+					  bind-to="currencies"
+					  edit-type="text"
+					  double-binding="true"
+					  width="150px">
+		</ax-column>
+		<ax-column header="trans:VatPercentsList"
+					  hideable="false"
+					  bind-to="vatPercentsList"
+					  edit-type="text"
+					  double-binding="true"
+					  width="150px">
+		</ax-column>
+		<ax-column header="Logo"
+					  hideable="false"
+					  hidden-column
+					  bind-to="logoFile"
+					  show-in-editor="true"
+					  width="150px">
+			<ax-column-edit type="custom">
+				<column>
+					<ax-file btn-text="Select file"
+								class="form-control"
+								has-input="true"
+								ng-model="dataItem.logoFile"
+								ng-focus="$ctrl.objectHasFocus($event, $ctrl.datasource, 'logoFile');"
+								ng-readonly="$ctrl.readOnly"></ax-file>
+					<img ng-src="{{dataItem.logoPath}}" style="height:32px;margin:1px">
+				</column>
+			</ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:Stamp"
+					  hideable="false"
+					  hidden-column
+					  bind-to="stampFile"
+					  show-in-editor="true"
+					  width="150px">
+			<ax-column-edit type="custom">
+				<column>
+					<ax-file btn-text="Select file"
+								class="form-control"
+								has-input="true"
+								ng-model="dataItem.stampFile"
+								ng-focus="$ctrl.objectHasFocus($event, $ctrl.datasource, 'stampFile');"
+								ng-readonly="$ctrl.readOnly"></ax-file>
+					<img ng-src="{{dataItem.stampPath}}" style="width:100px;margin:1px">
+				</column>
+			</ax-column-edit>
+		</ax-column>
+	</ax-grid>
+</div>

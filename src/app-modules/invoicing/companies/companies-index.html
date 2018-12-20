@@ -1,0 +1,143 @@
+<style>
+	ax-form td[column-index='1'][role=label] {
+		padding-left: 10px;
+	}
+</style>
+<div ng-controller="companiesCtrl">
+	<div class="form-title">
+		{{::trans('Companies')}}
+	</div>
+	<ax-grid config="$parent.launcher.dataTable1"
+				order-by="nameInvariant"
+				item-id-field="id"
+				api-controller="companies"
+				load-data-responses="countries=>dataSet.countries;cities=>dataSet.cities"
+				edit-row="editor"
+				apply-changes-on-save="false"
+				auto-focus="true"
+				customizable-freezed-columns="false"
+				customizable-edit-mode="false"
+				refresh-item-on-edit="true"
+				ng-style="{'top':(dataStore.formTitleHeight()+10)+'px'}"
+				style="left:10px;right:10px;bottom:10px;">
+		<ax-toolbar min-width="560px">
+			<ax-button button-type="refresh"></ax-button>
+			<ax-button button-type="settings"></ax-button>
+		</ax-toolbar>
+		<ax-grid-editor width="870px"
+							 position="over"
+							 show-fields-errors-as="text"
+							 group-controls-in-sections="true"
+							 toolbar-ax-scroller="true"
+							 editor-title="trans:Company"
+							 cols-width="175px, 300px, 150px,100%"
+							 columns-no="2"
+							 initial-state="visible"></ax-grid-editor>
+		<ax-column header="trans:CompanyName"
+					  hideable="false"
+					  bind-to="name"
+					  editor-column-index="1"
+					  sortable="nameInvariant"
+					  width="300px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-edit edit-type="text"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:VatRegistration"
+					  bind-to="code"
+					  editor-column-index="1"
+					  width="160px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-edit edit-type="text"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:TradeRegister"
+					  bind-to="tradeRegister"
+					  editor-column-index="1"
+					  width="160px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-edit edit-type="text"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:Administrator"
+					  bind-to="administratorName"
+					  editor-column-index="1"
+					  width="200px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-edit edit-type="text"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:SeatCountry"
+					  bind-to="countryId"
+					  sortable="countryInvariant"
+					  editor-column-index="2"
+					  width="200px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-view view-type="text" bind-to="country"></ax-column-view>
+			<ax-column-edit edit-type="autocomplete"
+								 datasource="$ctrl.$parent.dataSet.countries"
+								 item-id-field="id"
+								 item-display-field="name"
+								 item-invariant-field="nameInvariant"
+								 link-popup-template-url="'/app-modules/invoicing/countries/countries-popup.html'"
+								 link-popup-caret-class="fa fa-edit"
+								 link-popup-ctrl="$parent.$ctrl.$parent.countriesEdit"
+								 link-popup-popup-height="305px"
+								 link-popup-popup-width="340px"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:SeatCounty"
+					  bind-to="county"
+					  editor-column-index="2"
+					  width="200px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-edit edit-type="text"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:SeatCity"
+					  bind-to="cityId"
+					  editor-column-index="2"
+					  sortable="cityInvariant"
+					  width="200px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-view view-type="text" bind-to="city"></ax-column-view>
+			<ax-column-edit edit-type="autocomplete"
+								 datasource="$ctrl.$parent.dataSet.cities"
+								 datasource-filter="$ctrl.$parent.getCitiesForCountry(datasource,param)"
+								 datasource-filter-param="$parent.$parent.dataItem.countryId"
+								 item-id-field="id"
+								 item-display-field="name"
+								 item-invariant-field="nameInvariant"
+								 link-popup-template-url="'/app-modules/invoicing/cities/cities-popup.html'"
+								 link-popup-caret-class="fa fa-edit"
+								 link-popup-ctrl="$parent.$ctrl.$parent.citiesEdit"
+								 link-popup-open-params="$parent.$parent.$ctrl.$parent.getDataItemCountry($parent.$parent.$parent.$parent.dataItem)"
+								 link-popup-popup-height="200px"
+								 link-popup-popup-width="405px"></ax-column-edit>
+		</ax-column>
+		<ax-column header="trans:SeatAddress"
+					  editor-column-index="2"
+					  bind-to="address"
+					  width="300px">
+			<ax-column-filter filter-type="text"></ax-column-filter>
+			<ax-column-view view-type="text"></ax-column-view>
+			<ax-column-edit edit-type="text-with-zoom"></ax-column-edit>
+		</ax-column>
+
+		<ax-column header="trans:Details"
+					  hideable="true"
+					  exportable="false"
+					  width="100px">
+			<ax-column-view view-type="custom" style="padding:0 2px">
+				<ax-dropdown-popup style="width:100%;margin:0"
+										 popup-height="300px"
+										 button-class="btn icon fa fa-external-link"
+										 caret-class="fa"
+										 btn-style="text-align:center"
+										 ng-disabled="$ctrl.validateForm? !$ctrl.config.dataItem: !$parent.dataItem"
+										 popup-width="803px"
+										 popup-relative-left="-745px"
+										 open-params="$parent.dataItem"
+										 template-url="'/app-modules/invoicing/companies/companies-details.html'"></ax-dropdown-popup>
+			</ax-column-view>
+			<ax-column-editor colspan="4"
+									style="width:100%;height:463px"
+									ax-dynamic-template-url="'/app-modules/invoicing/companies/companies-details.html'">
+			</ax-column-editor>
+		</ax-column>
+	</ax-grid>
+</div>

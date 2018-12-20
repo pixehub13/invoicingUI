@@ -1,0 +1,90 @@
+<ax-grid config="$parent.emailTemplates"
+			api-controller="companies-email-templates"
+			edit-row="editor"
+			debug="false"
+			apply-changes-on-save="false"
+			auto-focus="false"
+			right-freezed-columns="1"
+			customizable-freezed-columns="false"
+			customizable-config="false"
+			customizable-edit-mode="false"
+			columns-autofit-enabled="false"
+			export-disabled="true"
+			auto-load-data="false"
+			order-by="name"
+			item-id-field="id">
+	<ax-toolbar>
+		<ax-button toolbar="left"
+					  style="margin-right:0"
+					  show-title="true"
+					  button-type="settings"></ax-button>
+	</ax-toolbar>
+	<ax-grid-editor width="600px"
+						 position="over"
+						 show-fields-errors-as="text"
+						 group-controls-in-sections="true"
+						 toolbar-ax-scroller="true"
+						 editor-title="'Add/Edit email template'"
+						 cols-width="125px,360px, 130px, 100%"
+						 columns-no="2"
+						 initial-state="visible"></ax-grid-editor>
+	<ax-column header="trans:TemplateName"
+				  bind-to="name"
+				  hideable="false"
+				  header-menu="false"
+				  editor-column-index="1"
+				  width="200px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Subject"
+				  hideable="false"
+				  header-menu="false"
+				  bind-to="subject"
+				  editor-column-index="1"
+				  width="350px">
+		<ax-column-edit edit-type="text"
+							 ondrop="angular.element(this).scope().$ctrl.$parent.$parent.emailTemplates.variables.dropToSubject(event)"
+							 ondragover="angular.element(this).scope().$ctrl.$parent.$parent.emailTemplates.variables.allowDrop(event)"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:SenderEmail"
+				  hideable="false"
+				  header-menu="false"
+				  editor-column-index="2"
+				  bind-to="from"
+				  width="425px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:ToEmailsList"
+				  hideable="false"
+				  header-menu="false"
+				  bind-to="to"
+				  editor-column-index="2"
+				  width="425px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Message"
+				  hideable="false"
+				  header-menu="false"
+				  bind-to="message"
+				  editor-column-index="1"
+				  width="280px">
+		<ax-column-editor edit-type="custom" width="1040px" style="height: auto;display:flex;flex-direction: row" colspan="4">
+			<div ckeditor="$ctrl.$parent.$parent.emailTemplates.ckEditorConfig"
+				  ng-if="$ctrl.$parent.$parent.emailTemplates.ckEditorConfig"
+				  ready="$ctrl.$parent.$parent.emailTemplates.ckEditorConfig.onReady"
+				  ng-model="$ctrl.datasource.message"
+				  ng-readonly="$ctrl.readOnly"></div>
+			<div style="margin-left:10px;border:1px solid lightgray;padding:10px" ng-if="$ctrl.$parent.$parent.emailTemplates.ckEditorConfig.ready">
+				<label style="width:100%;border-bottom:1px solid lightgray;">{{::trans('Variables')}}</label>
+				<div style="font-size:80%;color: gray;border-bottom:1px solid lightgray;line-height: 17px">Drag variable and drop into Subject or Message text</div>
+				<div class="variables-list" style="line-height: 22px;" ng-style="{'cursor':($ctrl.readOnly ?'default':'move')}">
+					<div ng-repeat="item in $ctrl.$parent.$parent.emailTemplates.variables.items"
+						  ng-attr-draggable="{{$ctrl.readOnly !== true}}"
+						  ondragstart="angular.element(this).scope().$ctrl.$parent.$parent.emailTemplates.variables.drag(event)"
+						  ng-bind="item.name"></div>
+				</div>
+			</div>
+		</ax-column-editor>
+	</ax-column>
+	<ax-column header="Actions" show-header="false" view-type="crud-buttons" width="84px"></ax-column>
+</ax-grid>

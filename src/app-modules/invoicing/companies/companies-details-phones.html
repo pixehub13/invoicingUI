@@ -1,0 +1,36 @@
+<ax-table config="$parent.phones"
+			 api-controller="companies-phones"
+			 edit-row="inline"
+			 apply-changes-on-save="false"
+			 auto-focus="false"
+			 right-freezed-columns="1"
+			 customizable-freezed-columns="false"
+			 customizable-config="false"
+			 customizable-edit-mode="false"
+			 columns-autofit-enabled="false"
+			 export-disabled="true"
+			 auto-load-data="false"
+			 order-by="name"
+			 item-id-field="id">
+	<ax-toolbar>
+		<ax-button toolbar="right"
+					  style="margin-right:0"
+					  show-title="false"
+					  button-type="settings"></ax-button>
+	</ax-toolbar>
+	<ax-column header="trans:Name"
+				  bind-to="name"
+				  hideable="false"
+				  header-menu="false"
+				  width="200px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Phone"
+				  hideable="false"
+				  header-menu="false"
+				  bind-to="phone"
+				  width="150px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Actions" show-header="false" view-type="crud-buttons" width="84px"></ax-column>
+</ax-table>

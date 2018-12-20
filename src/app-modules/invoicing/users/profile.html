@@ -1,0 +1,107 @@
+<div ng-controller="profileCtrl" style="width:100%">
+	<div class="form-title">
+		{{::trans('Profile')}}
+	</div>
+	<ax-form config="form1"
+				datasource="form1.data"
+				style="padding:10px;height:initial"
+				api-controller="users"
+				item-id-field="id"
+				notify-success="true">
+		<ax-form-table cols-width="140px,250px">
+			<ax-form-table-column labels-layout="left">
+				<ax-form-field>
+					<label>{{::trans('Email')}}</label>
+					<ax-form-input bind-to="email"
+										type="text"
+										width="250px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('FirstName')}}</label>
+					<ax-form-input bind-to="prenume"
+										type="text"
+										width="250px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('LastName')}}</label>
+					<ax-form-input bind-to="nume"
+										type="text"
+										width="250px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('Serial')}}</label>
+					<ax-form-input bind-to="CiSeries"
+										type="text"
+										width="100px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('Number')}}</label>
+					<ax-form-input bind-to="CiNumber"
+										type="text"
+										width="100px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('IssuedBy')}}</label>
+					<ax-form-input bind-to="CiIssuedBy"
+										type="text"
+										width="250px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('ReleaseDay')}}</label>
+					<ax-form-input bind-to="CiDate"
+										type="date"
+										width="190px"></ax-form-input>
+				</ax-form-field>
+				<ax-form-field>
+					<label>{{::trans('SecurityNumber')}}</label>
+					<ax-form-input bind-to="CNP"
+										type="text"
+										width="170px"></ax-form-input>
+				</ax-form-field>
+			</ax-form-table-column>
+
+		</ax-form-table>
+		<ax-form-errors></ax-form-errors>
+
+	</ax-form>
+	<div style="margin-left:10px;margin-bottom:10px">
+		<button ng-show="!form1.$ctrl.readOnly" ng-click="form1.$ctrl.save()" class="btn btn-primary"><i class="fa fa-save"></i>{{::trans('Save')}}</button>
+		<button ng-show="!form1.$ctrl.readOnly" ng-click="form1.$ctrl.undo()" class="btn btn-primary"><i class="fa fa-undo"></i>{{::trans('Reset')}}</button>
+	</div>
+	<div class="form-title">
+		{{::trans('Preferences')}}
+	</div>
+	<div style="display: flex;flex-direction: column" class="profile-pref">
+		<style> .profile-pref label{
+			width:150px;
+		}</style>
+		<div class="inline" style="margin-top:10px;margin-left:10px;">
+			<label>{{::trans('CurrentTheme')}}:</label>
+			<ax-dropdown-list datasource="theme.list"
+									dropdown-model="theme.current"
+									dropdown-model-type="object"
+									on-selection-change="theme.onChange()"
+									btn-class="btn btn-primary"
+									btn-style="color:white;"
+									popup-class="theme-list"
+									list-width="100%"
+									list-height="140px"
+									list-item-id-field="name"
+									style="width:215px;margin:auto 5px"></ax-dropdown-list>
+		</div>
+		<div class="inline" style="margin-top:10px;margin-left:10px;">
+			<label>{{::trans('CurrentLanguage')}}:</label>
+			<ax-dropdown-list datasource="currentUser.languages"
+									dropdown-model="currentUser.language"
+									dropdown-model-type="id"
+									on-selection-change="currentUser.changeLanguage()"
+									btn-class="btn btn-primary"
+									btn-style="color:white;"
+									popup-class="theme-list"
+									list-height="60px"
+									list-item-id-field="id"
+									list-item-display-field="name"
+									style="width:130px;margin:auto 5px"></ax-dropdown-list>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,62 @@
+<ax-table api-controller="companies-accounts"
+			 order-by="bank,account"
+			 config="launcher.dataTable1"
+			 selectable-rows-model-type="id-field"
+			 selectable-rows-model="launcher.currentSelection"
+			 style="height:100%"
+			 item-id-field="id"
+			 selectable-rows="single"
+			 edit-row="inline"
+			 apply-changes-on-save="false"
+			 auto-focus="true"
+			 right-freezed-columns="1"
+			 customizable-freezed-columns="false"
+			 customizable-config="false"
+			 customizable-edit-mode="false"
+			 columns-autofit-enabled="false"
+			 export-disabled="true"
+			 dont-close-popup="true"
+			 refresh-item-on-edit="true">
+	<ax-toolbar>
+		<label class="header-title" toolbar="left">
+			Company accounts
+		</label>
+		<button toolbar="right"
+				  class="btn btn-primary"
+				  style="width:auto;margin-right:3px"
+				  ng-disabled="($ctrl.$parent.launcher.readOnly || !$ctrl.currentItem) ? true: false"
+				  ng-click="$ctrl.$parent.launcher.confirm($event)">
+			<i class="fa fa-check"></i>Select
+		</button>
+		<ax-button toolbar="right"
+					  show-title="false"
+					  style="margin-right:0"
+					  button-type="settings"></ax-button>
+		<div toolbar="right"
+			  class="ngdialog-close"
+			  style="position:relative;display:inline-flex"
+			  ng-click="$ctrl.$parent.popupClose($event)"></div>
+	</ax-toolbar>
+	<ax-column header="Account"
+				  hideable="false"
+				  header-menu="false"
+				  bind-to="account"
+				  width="250px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="Bank"
+				  hideable="false"
+				  header-menu="false"
+				  bind-to="bank"
+				  width="150px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="Name"
+				  bind-to="name"
+				  header-menu="false"
+				  hideable="false"
+				  width="200px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="Actions" show-header="false" view-type="crud-buttons" width="60px"></ax-column>
+</ax-table>

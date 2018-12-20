@@ -1,0 +1,19 @@
+<div ng-controller="companiesDetailsCtrl" style="height: 100%;" ng-style="{'padding':launcher?'10px':''}">
+    <div class="error"
+         style="margin-bottom:10px;color:red"
+         ng-if="company.id===0">You must save new company before adding details!
+    </div>
+    <ax-tabs tabs-titles="['trans:Phones','trans:Emails','trans:BankAccounts', 'trans:Addresses', 'trans:EmailTemplates']"
+             style="position:absolute;top:25px;bottom:0;left:0;right:0"
+             initial-select="trans:Phones">
+        <ax-tab-view tab-title="trans:Phones" ax-dynamic-template-url="'/app-modules/invoicing/companies/companies-details-phones.html'"></ax-tab-view>
+        <ax-tab-view tab-title="trans:Emails" ax-dynamic-template-url="'/app-modules/invoicing/companies/companies-details-emails.html'"></ax-tab-view>
+        <ax-tab-view tab-title="trans:BankAccounts" ax-dynamic-template-url="'/app-modules/invoicing/companies/companies-details-accounts.html'"></ax-tab-view>
+        <ax-tab-view tab-title="trans:Addresses" ax-dynamic-template-url="'/app-modules/invoicing/companies/companies-details-addresses.html'"></ax-tab-view>
+        <ax-tab-view tab-title="trans:EmailTemplates" ax-dynamic-template-url="'/app-modules/invoicing/companies/companies-details-email-templates.html'"></ax-tab-view>
+    </ax-tabs>
+    <div ng-show="$parent.launcher"
+         class="ngdialog-close"
+         style="top:10px;right:10px;"
+         ng-click="$parent.popupClose($event)"></div>
+</div>

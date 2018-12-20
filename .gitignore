@@ -1,0 +1,7 @@
+gulpfile.sftp.json
+package-lock.json
+.idea
+repo
+node_modules
+public
+src/api/config.secrets.php

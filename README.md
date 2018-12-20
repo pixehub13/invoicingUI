@@ -1,37 +1,22 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/bogdanim36/invoicing/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/bogdanim36/invoicing/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+# project
+<strong>Steps for creating a new application with ax-frmk:</strong>
+<br>  - Clone this repo: https://github.com/bogdanim36/project.
+<br>  - Run npm install in project folder.
+<br>  - Check in gulpfile.config.json if paths are that what you want, and change it if you need.
+<br>  - Run npm create script with  "npm run create". This command  will clone  https://github.com/bogdanim36/ax-frmk and will create a new project folder structure.
+<br>  - Delete what plugins you dont need in app-modules/bower-libs, and add you want to use.
+<br>  - Add to .gitignore your own folders for modules from app-modules 
+<br>  - In app-modules/angular-modules.js include what angular modules you are using (if you are using some extra plugin, whitch are installed in app-modules/bower-libs
+<br>  - In app-modules/config-auth.js setup your auth
+<br>  - In app-modules/config-ax-api.js setup your api
+<br>  - In app-modules/config-ax-components.js setup ax-component params.
+<br>  - In app-modules/config-modules.js config your application name, version, and other parameters.
+<br>  - Add dependencies for yours added plugins in app/modules/gul-config.json. 
+<br>  - Check gulpfile.config.json and gulpfile.sftp.json and config as you need. If you are not agreed with thise project structure files, you can changed, but you must change also in gulpfile.config.json all the path changed.
+<br>  - Create your database, user, password, tables.
+<br>  - Create your api, if not using php-api. If using php-api, use config.*.php files to setup php-api.
+<br>  - Create you template and pages for your application.
+<br>  - Run Es6-Dev-Copy gulp task to move files to folder "public/es6" for web server.
+<br>  - Start Es6-Dev-watch gulp task. From this point keep it open while developing. The deploying gulp task Publish-All can work in same time, whithout problems.
+<br>  - Config your site server (pointed to 'public/es6' folder). I prefer IIS for php backend on windows (form better performance)).
+<br>  All theses steps can take maximum 10-30min, and you can start to work on application pages and views.

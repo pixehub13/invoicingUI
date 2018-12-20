@@ -1,0 +1,64 @@
+{
+  "path": {
+    "src": "src/",
+    "bowerLibs": [
+      "components/bower-libs",
+      "app-modules/bower-libs"
+    ],
+    "applicationInfo": "app-modules/config-appinfo"
+  },
+  "configs": {
+    "components": {
+      "path": "components"
+    },
+    "app-modules": {
+      "path": "app-modules"
+    }
+  },
+  "profiles": {
+    "repo": {
+      "dest": "repo",
+      "src": ["db-scripts/create-db-tables.demo.sql", "db-scripts/init-db.demo.sql", "gulp-tasks/**", "src/**", "gulpfile.config.json", "gulpfile.sftp.demo.json", "gulpfile.js", "package.json", "README.md", "!.git*" ]
+    },
+    "dev": {
+      "es6": {
+        "prepare": "build/es6",
+        "public": "dist/es6"
+      },
+      "es5": {
+        "prepare": "build/es5",
+        "public": "dist/es5"
+      }
+    },
+    "prod": {
+      "angularBase": "/",
+      "copyFiles": [],
+      "prepare": "build/prod",
+      "public": "dist/prod",
+      "remote": {
+      }
+    }
+  },
+  "tasks": [
+    {
+      "extension": ".css",
+      "outputFileName": "site.min.css"
+    },
+    {
+      "extension": ".js",
+      "outputFileName": "head.min.js"
+    },
+    {
+      "extension": ".js",
+      "outputFileName": "body.min.js"
+    }
+  ],
+  "babelPresets": [
+    "es2015"
+  ],
+  "favicon": "app-modules\\favicon.jpg",
+  "fontsFileMasks": [
+    "/components/bower-libs/font-awesome/fonts/*.*",
+    "/components/bower-libs/bootstrap/fonts/*.*"
+  ]
+}

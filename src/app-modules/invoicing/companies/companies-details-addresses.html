@@ -1,0 +1,75 @@
+<ax-table config="$parent.addresses"
+			 api-controller="companies-addresses"
+			 order-by="countryInvariant, cityInvariant, name"
+			 edit-row="inline"
+			 apply-changes-on-save="false"
+			 auto-focus="false"
+			 right-freezed-columns="1"
+			 customizable-freezed-columns="false"
+			 customizable-config="false"
+			 customizable-edit-mode="false"
+			 columns-autofit-enabled="false"
+			 export-disabled="true"
+			 auto-load-data="false"
+			 item-id-field="id">
+	<ax-toolbar>
+		<ax-button toolbar="right"
+					  style="margin-right:0"
+					  show-title="false"
+					  button-type="settings"></ax-button>
+	</ax-toolbar>
+	<ax-column header="trans:Name"
+				  bind-to="name"
+				  hideable="false"
+				  width="150px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Country"
+				  bind-to="countryId"
+				  sortable="countryInvariant"
+				  width="150px">
+		<ax-column-view view-type="text" bind-to="country"></ax-column-view>
+		<ax-column-edit edit-type="autocomplete"
+							 datasource="$ctrl.$parent.$parent.dataSet.countries"
+							 item-id-field="id"
+							 item-display-field="name"
+							 item-invariant-field="nameInvariant"
+							 link-popup-template-url="'/app-modules/invoicing/countries/countries-popup.html'"
+							 link-popup-caret-class="fa fa-edit"
+							 link-popup-ctrl="$parent.$ctrl.$parent.$parent.countriesEdit"
+							 link-popup-popup-height="305px"
+							 link-popup-popup-width="350px"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:County"
+				  bind-to="county"
+				  hideable="false"
+				  width="150px">
+		<ax-column-edit edit-type="text"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:City"
+				  bind-to="cityId"
+				  sortable="cityInvariant"
+				  width="200px">
+		<ax-column-view view-type="text" bind-to="city"></ax-column-view>
+		<ax-column-edit edit-type="autocomplete"
+							 datasource="$ctrl.$parent.$parent.dataSet.cities"
+							 datasource-filter="$ctrl.$parent.$parent.getCitiesForCountry(datasource,param)"
+							 datasource-filter-param="$parent.$parent.dataItem.countryId"
+							 item-id-field="id"
+							 item-display-field="name"
+							 item-invariant-field="nameInvariant"
+							 link-popup-template-url="'/app-modules/invoicing/cities/cities-popup.html'"
+							 link-popup-caret-class="fa fa-edit"
+							 link-popup-ctrl="$parent.$ctrl.$parent.$parent.citiesEdit"
+							 link-popup-open-params="$parent.$parent.$ctrl.$parent.$parent.getDataItemCountry($parent.$parent.$parent.dataItem)"
+							 link-popup-popup-height="200px"
+							 link-popup-popup-width="350px"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Address"
+				  bind-to="address"
+				  width="300px">
+		<ax-column-view view-type="text"></ax-column-view>
+		<ax-column-edit edit-type="text-with-zoom"></ax-column-edit>
+	</ax-column>
+	<ax-column header="trans:Actions" show-header="false" view-type="crud-buttons" width="84px"></ax-column>
+</ax-table>

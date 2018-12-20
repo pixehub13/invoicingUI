@@ -1,0 +1,93 @@
+<div ng-controller="emailController as viewCtrl">
+	<div class="form-title">
+		{{::trans("SendEmail")}}
+		<div ng-if="viewCtrl.data.templates && viewCtrl.data.templates.length>0"
+			  style="padding-left:20px;font-weight: normal;font-size: 97%;display:inline-flex"
+		>{{::trans("SelectTemplate")}}:
+			<ax-dropdown-list datasource="viewCtrl.data.templates"
+									style="width:200px;margin: auto 0 auto 5px"
+									class="form-control"
+									dropdown-model="viewCtrl.data.selectedTemplate"
+									dropdown-model-type="object"
+									list-selectable-rows-model-type="object"
+									list-item-id-field="id"
+									list-height="100px"
+									on-selection-change="viewCtrl.templateChanged(dataItem)"
+									list-item-display-field="name"
+			></ax-dropdown-list>
+		</div>
+	</div>
+
+	<form id="email-form">
+		<ax-form config="viewCtrl.formConfig"
+					datasource="viewCtrl.data"
+					style="padding:10px;height:initial"
+					api-controller="users"
+					item-id-field="id"
+					notify-success="true">
+			<ax-form-table cols-width="85px,805px">
+				<ax-form-table-column labels-layout="left">
+
+					<ax-form-field>
+						<label>{{::trans('From')}}</label>
+						<ax-form-input bind-to="from"
+											autocomplete="from"
+											name="from"
+											type="text"
+											width="100%"></ax-form-input>
+					</ax-form-field>
+					<ax-form-field>
+						<label>{{::trans('To')}}</label>
+						<ax-form-input bind-to="to"
+											autocomplete="to"
+											name="to"
+											type="text"
+											width="100%"></ax-form-input>
+					</ax-form-field>
+					<ax-form-field>
+						<label>{{::trans('Subject')}}</label>
+						<ax-form-input bind-to="subject"
+											type="text"
+											name="subject"
+											autocomplete="off"
+											width="100%"></ax-form-input>
+					</ax-form-field>
+					<ax-form-field colspan="2">
+						<ax-form-input bind-to="message"
+											type="custom"
+											name="message"
+											autocomplete="off"
+											width="100%">
+							<div ckeditor="$ctrl.$parent.viewCtrl.ckEditorConfig"
+									 ng-if="$ctrl.$parent.viewCtrl.ckEditorConfig"
+									 ng-model="$ctrl.datasource.message"
+									 ng-readonly="$ctrl.readOnly"></div>
+						</ax-form-input>
+					</ax-form-field>
+					<ax-form-field colspan="2">
+						<ax-form-input type="file"
+											bind-to="attachments"
+											multiple
+											config="$ctrl.$parent.viewCtrl.uploadFilesConfig"
+											show-files-list
+											show-remove-btn
+											max-size="2M"
+											btn-text="<i class='fa fa-paperclip' style='margin-right:5px;'></i>Add attachments"
+											btn-style="width:auto"
+											style="height:100px;line-height:24px;"></ax-form-input>
+					</ax-form-field>
+				</ax-form-table-column>
+			</ax-form-table>
+			<ax-form-errors style="max-height:100px;max-width:100%;overflow: auto"></ax-form-errors>
+		</ax-form>
+	</form>
+	<div style="margin-left:10px;margin-bottom:10px">
+		<button ng-click="viewCtrl.send()" class="btn btn-primary" ng-class="">
+			<i class="fa " ng-class="{'fa fa-check': viewCtrl.messageWasSend,
+			'fa-send-o':!viewCtrl.messageWasSend && !viewCtrl.messageSending,
+			'fa fa-spinner fa-pulse fa-fw': viewCtrl.messageSending, 'fa fa-alert':viewCtrl.messageError}"></i>
+			<span ng-bind="viewCtrl.messageWasSend?'Message was sended':'Send'"></span></button>
+		<button ng-click="viewCtrl.dataClear()" class="btn btn-primary"><i class="fa fa-eraser"></i>{{::trans('Clear')}}</button>
+		<button ng-click="popupClose()" class="btn btn-primary"><i class="fa fa-times"></i>{{::trans('Close')}}</button>
+	</div>
+</div>

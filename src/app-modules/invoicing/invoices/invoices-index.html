@@ -1,0 +1,713 @@
+<div ng-controller="invoicesCodeCtrl">
+	<style>
+		ax-table-editor.invoice-editor ax-form td[column-index='1'][role=label] {
+			padding-left: 10px
+		}
+
+		ax-table-editor ax-form td[column-index='0'] {
+			background-color: antiquewhite;
+		}
+
+		ax-table-editor.invoice-editor ax-form td[column-index='0'][role=label],
+		ax-table-editor.invoice-editor ax-form td[column-index='2'][role=label] {
+			background-color: antiquewhite;
+			padding-left: 8px
+		}
+
+		ax-table-editor.invoice-editor ax-form tr[row-index='0'] > td[column-index='0'],
+		ax-table-editor.invoice-editor ax-form tr[row-index='0'] > td[column-index='2'] {
+			padding-top: 5px;
+		}
+
+		ax-table-editor.invoice-editor ax-form td[column-index='2'] {
+			background-color: antiquewhite
+		}
+
+		ax-table-editor.invoice-editor ax-form-section {
+			border-bottom: none;
+		}
+
+		.invoices {
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+			right: 10px;
+		}
+
+		.invoice-editor ax-form-section-header {
+			background-color: #73b1ef !important;
+		}
+	</style>
+	<div class="form-title">
+		{{::trans('Invoices')}}
+	</div>
+	<div class="invoices box-shadow" ng-style="{'top':(dataStore.formTitleHeight()+10)+'px'}" style="overflow: auto">
+		<ax-grid config="invoices"
+					api-controller="invoices"
+					load-data-responses="companies=>dataSet.companies;addresses=>dataSet.addresses;accounts=>dataSet.accounts;"
+					order-by="-number"
+					item-id-field="id"
+					debug="false"
+					edit-row="editor"
+					apply-changes-on-save="true"
+					auto-focus="true"
+					customizable-freezed-columns="true"
+					left-freezed-columns="6"
+					right-freezed-columns="0"
+					customizable-config="false"
+					customizable-edit-mode="false"
+					customizable-pivot-table="false"
+					columns-autofit-enabled="false"
+					export-disabled="true"
+					show-loader="true"
+					auto-load-data="true"
+					style="position:relative;height:310px;width:100%">
+			<ax-toolbar >
+				<label class="header-title" toolbar="left">{{::trans("Invoices")}}</label>
+				<div class="toolbar-container" toolbar="right">
+					<label>From:</label>
+					<ax-datetime type="date"
+									 ng-model="$ctrl.config.dateFrom"
+									 input-format="YYYY-MM-DD"
+									 style="margin-left:3px;margin-right:5px;width:215px;"
+									 class="form-control"></ax-datetime>
+					<label>To:</label>
+					<ax-datetime type="date"
+									 ng-model="$ctrl.config.dateTo"
+									 input-format="YYYY-MM-DD"
+									 style="margin-left:3px;width:215px;"
+									 class="form-control"></ax-datetime>
+				</div>
+				<ax-button button-type="refresh" toolbar="right" style="margin-right:3px"></ax-button>
+				<ax-button button-type="groups-toggle" toolbar="right" style="margin-right:3px"></ax-button>
+				<ax-button button-type="settings" show-title="false" toolbar="right" style="margin-right:3px"></ax-button>
+				<ax-button button-type="maximize"
+							  toolbar="right"></ax-button>
+
+			</ax-toolbar>
+			<ax-grid-editor width="1035px"
+								 position="over"
+								 cols-width="145px, 250px, 75px,150px,145px,250px"
+								 columns-no="3"
+								 class="invoice-editor"
+								 editor-title="trans:Invoice"
+								 show-fields-errors-as="text"
+								 group-controls-in-sections="true"
+								 toolbar-ax-scroller="true"
+								 initial-state="visible"></ax-grid-editor>
+			<ax-export export-type="client" api-controller="export" file-name="invoice">
+				<ax-export-item cols-width="35,200,40,50,70,75,95,95">
+					<ax-export-links></ax-export-links>
+					<ax-export-scripts></ax-export-scripts>
+					<ax-export-style>
+						html, body {
+						height: 100%;
+						width: 100%;
+						position: fixed;
+						font: 10px/1.5 Arial, sans-serif !important;
+						margin: 0;
+						}
+						html * {
+						box-sizing:border-box;
+						}
+
+						table {
+						font-size:14px;
+						table-layout:fixed;
+						width:1px;
+						border-spacing:0 !important;
+						}
+						table td:not([colspan]){
+						vertical-align:top;
+						padding:0px 4px;
+						}
+						table td[role=input] {
+						font-weight:bold;
+						}
+
+						<!--table.header>colgroup col:nth-child(1),-->
+						<!--table.details>colgroup col:nth-child(1),-->
+						<!--table.content>colgroup col:nth-child(1),-->
+						<!--table.footer>colgroup col:nth-child(1) {width:40px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(2),-->
+						<!--table.details>colgroup col:nth-child(2),-->
+						<!--table.content>colgroup col:nth-child(2),-->
+						<!--table.footer>colgroup col:nth-child(2) {width:220px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(3),-->
+						<!--table.details>colgroup col:nth-child(3),-->
+						<!--table.content>colgroup col:nth-child(3),-->
+						<!--table.footer>colgroup col:nth-child(3) {width:50px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(4),-->
+						<!--table.details>colgroup col:nth-child(4),-->
+						<!--table.content>colgroup col:nth-child(4),-->
+						<!--table.footer>colgroup col:nth-child(4) {width:45px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(5),-->
+						<!--table.details>colgroup col:nth-child(5),-->
+						<!--table.content>colgroup col:nth-child(5),-->
+						<!--table.footer>colgroup col:nth-child(5) {width:70px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(6),-->
+						<!--table.details>colgroup col:nth-child(6),-->
+						<!--table.content>colgroup col:nth-child(6),-->
+						<!--table.footer>colgroup col:nth-child(6) {width:80px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(7),-->
+						<!--table.details>colgroup col:nth-child(7),-->
+						<!--table.content>colgroup col:nth-child(7),-->
+						<!--table.footer>colgroup col:nth-child(7) {width:100px !important; vertical-align:top}-->
+						<!--table.header>colgroup col:nth-child(8),-->
+						<!--table.details>colgroup col:nth-child(8),-->
+						<!--table.content>colgroup col:nth-child(8),-->
+						<!--table.footer>colgroup col:nth-child(8) {width:110px !important; vertical-align:top}-->
+						.group-footer > div{
+						text-align:right;
+						font-weight:bold;
+						padding-right:10px;
+						}
+						table.details tr[row-index='1']>th:last-child {border-right: 1px solid black;}
+						table.details tr> td:last-child {border-right: 1px solid lightgray;}
+						table.details tr.group-footer> td {
+						border-top: 1px solid black;
+						border-bottom: 1px solid black;
+						}
+						label {
+						font-weight:bold;
+						}
+
+
+					</ax-export-style>
+					<ax-export-style-xls>
+						<!--table
+						@page
+							 {mso-number-format:"\#\,\#\#0\.00";
+							 mso-page-orientation:portrait; }
+
+						.style0
+							 {font-style:normal;
+							 font-family:Arial;
+							 white-space:normal;
+							 vertical-align:top;
+							 }
+
+						td,th
+							 {mso-style-parent:style0;
+							 font-style:normal;
+							 font-family:Arial;
+							 font-size:10px;
+							 vertical-align:top;
+							 white-space:normal;
+							 text-align:left;
+							 }
+						table{ table-layout:fixed}
+						-->
+					</ax-export-style-xls>
+					<ax-export-content datasource="$ctrl.config.exportCfg.item.headerData(dataItem)">
+						<table class="content" style="width:660px">
+							<colgroup>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+							</colgroup>
+							<tr>
+								<td colspan="4" style="vertical-align:top;width:325px">
+									<span style="margin-right:3px;font-size: 130%;font-weight:bold;">Furnizor:</span>
+									<br><span style="font-size: 150%">{{dataItem.supplierName}}</span>
+									<br><span style="margin-right:5px;font-weight:bold">Capital social:</span>{{dataItem.supplierSocialCapital}}
+									<br><span style="margin-right:5px;font-weight:bold">Nr.reg.com.:</span>{{dataItem.supplierTradeRegister}}
+									<br><span style="margin-right:5px;font-weight:bold">C.I.F.:</span>{{dataItem.supplierCode}}
+									<br><span style="margin-right:5px;font-weight: bold">Sediu:</span>{{dataItem.supplierCity}}{{dataItem.supplierCounty? ', ' + dataItem.supplierCounty: ''}}{{dataItem.supplierCountry? ', ' + dataItem.supplierCountry: ''}}, {{dataItem.supplierAddress}}
+									<br><span style="margin-right:5px;font-weight:bold">Livrare din:</span>{{dataItem.supplierDeliveryCity}}{{dataItem.supplierDeliveryCounty? ', ' + dataItem.supplierDeliveryCounty: ''}}{{dataItem.supplierDeliveryCountry? ', ' + dataItem.supplierDeliveryCountry: ''}}, {{dataItem.supplierDeliveryAddress}}
+									<br><span style="margin-right:5px;font-weight:bold">Banca:</span>{{dataItem.supplierBank}}
+									<br><span style="margin-right:5px;font-weight:bold">Cont:</span>{{dataItem.supplierBankAccount}}
+									<br><span style="margin-right:5px;font-weight:bold">Telefon:</span>{{dataItem.supplierPhone}}
+									<br><span style="margin-right:5px;font-weight:bold">Email:</span>{{dataItem.supplierEmail}}
+									<br><span style="font-weight: bold">{{dataItem.vatRegistred?'':'NEPLATITOR TVA'}}</span>
+								</td>
+								<td colspan="4" style="vertical-align:top;width:335px">
+									<div style="font-size: 16px;border:1px solid black; padding-left: 20px;width:200px">
+										<span style="margin-right:5px;font-weight:bold;">Numar: </span>{{dataItem.serial.trim()}}-{{dataItem.number}}
+										<br><span style="margin-right:5px;font-weight:bold;">Data:</span> {{dataItem.date.toLocaleDateString()}}
+									</div>
+									<br><span style="margin-right:3px;font-size: 130%;font-weight:bold;">Cumparator:</span>
+									<br><span style="font-size: 150%">{{dataItem.customerName}}</span>
+									<br><span style="margin-right:5px;font-weight:bold">Nr.reg.com.:</span>{{dataItem.customerTradeRegister}}
+									<br><span style="margin-right:5px;font-weight:bold">C.I.F.:</span>{{dataItem.customerCode}}
+									<br><span style="margin-right:5px;font-weight:bold">Sediu:</span>{{dataItem.customerCity}}{{dataItem.customerCounty? ', ' + dataItem.customerCounty: ''}}{{dataItem.customerCountry? ', ' + dataItem.customerCountry: ''}}, {{dataItem.customerAddress}}
+									<br><span style="margin-right:5px;font-weight:bold">Livrare in:</span>{{dataItem.customerDeliveryCity}}{{dataItem.customerDeliveryCounty? ', ' + dataItem.customerDeliveryCounty: ''}}{{dataItem.customerDeliveryCountry? ', ' + dataItem.customerDeliveryCountry: ''}}, {{dataItem.customerDeliveryAddress}}
+									<br><span style="margin-right:5px;font-weight:bold">Banca:</span>{{dataItem.customerBank}}
+									<br><span style="margin-right:5px;font-weight:bold">Cont:</span>{{dataItem.customerBankAccount}}
+								</td>
+
+							</tr>
+							<tr style="height:30px;width:660px;">
+								<td colspan="8"></td>
+							</tr>
+						</table>
+
+					</ax-export-content>
+					<ax-export-details name="invoices.details" class="details" style="width:660px" title="trans:InvoiceDetails" show-title="false"></ax-export-details>
+					<ax-export-header datasource="$ctrl.config.exportCfg.item.headerData(dataItem)">
+						<table class="header" style="width:715px">
+							<colgroup>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+							</colgroup>
+							<tr>
+								<td colspan="8" style="height:40px"><img src="{{datasource.imageUrl}}"/></td>
+							</tr>
+							<tr>
+								<td colspan="8" style="height:40px;font-size:20px;text-align: center">FACTURA FISCALA</td>
+							</tr>
+						</table>
+					</ax-export-header>
+					<ax-export-footer datasource="$ctrl.config.exportCfg.item.footerData(dataItem)">
+						<table class="footer" style="width:660px">
+							<colgroup>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+								<col/>
+							</colgroup>
+							<tr style="height:30px;">
+								<td colspan="8" style="width:660px;"></td>
+							</tr>
+							<tr style="line-height:30px;">
+								<td colspan="8" style="width:660px;"><span style="font-weight:bold">Intocmit de </span>{{dataItem.userName}},
+									<span style="font-weight:bold">CI: </span>{{dataItem.userCiSeries}} - {{dataItem.userCiNumber}},
+									<span style="font-weight:bold">Eliberat de: </span>{{dataItem.userCiIssuedBy}},
+									<span style="font-weight:bold">CNP: </span>{{dataItem.userCNP}}
+								</td>
+							</tr>
+							<tr style="height:50px">
+								<td colspan="4" style="padding:5px; width:325px;font-weight:bold;border-top:1px solid lightgrey;border-bottom:1px solid lightgrey;border-left:1px solid lightgrey;border-right:1px solid lightgrey">
+									Date privind expeditia
+								</td>
+								<td colspan="2" style="padding:5px; width:145px;font-weight:bold;border-top:1px solid lightgrey;border-bottom:1px solid lightgrey;border-right:1px solid lightgrey;border-bottom:1px solid lightgrey">
+									Semnatura de primire
+								</td>
+								<td colspan="2" style="padding:5px; width:190px;font-weight:bold;border-top:1px solid lightgrey;border-bottom:1px solid lightgrey;border-right:1px solid lightgrey;">
+									Semnatura si stampila furnizorului
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey"><span style="font-weight:bold">Numele delegatului: </span>{{dataItem.userName}}</td>
+								<td colspan="2" rowspan="7" style="width:145px;border-right:1px solid lightgrey;border-bottom:1px solid lightgrey"></td>
+								<td colspan="2" style="width:190px;border-right:1px solid lightgrey;">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey"><span style="font-weight:bold">CI</span>:{{dataItem.userCiSeries}}-{{dataItem.userCiNumber}}</label> Eliberat de: {{dataItem.userCiIssuedBy}}</td>
+								<td colspan="2" rowspan="6" style="width:190px;border-right:1px solid lightgrey;border-bottom:1px solid lightgrey;vertical-align:center;text-align: center">
+									<img style="width:130px;height:130px" src="{{datasource.imageUrl}}"/></td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey"><span style="font-weight:bold">Numar auto</span></td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey"><span style="font-weight:bold">Expedierea s-a facut in prezenta noastra la</span></td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey"><span style="font-weight:bold">data si ora: </span>{{dataItem.createdAt|date:'dd.MM.yyyy HH:mm'}}</td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey;"></td>
+							</tr>
+							<tr>
+								<td colspan="4" style="width:325px;border-left:1px solid lightgrey;border-right:1px solid lightgrey;border-bottom:1px solid lightgrey"><span style="font-weight:bold">Semnaturile</span> .......................................</td>
+							</tr>
+						</table>
+					</ax-export-footer>
+				</ax-export-item>
+			</ax-export>
+			<ax-column header="trans:Supplier" width="250px" hidden-column hideable="false" show-in-editor="true">
+				<ax-column-view>{{dataItem.supplierName}}</ax-column-view>
+			</ax-column>
+			<ax-column header="trans:SupplierDeliveryAddress"
+						  header-title="trans:DeliveryAddress"
+						  editor-column-index="1"
+						  hidden-column
+						  show-in-editor="true"
+						  bind-to="supplierDeliveryAddressId"
+						  width="300px">
+
+				<ax-column-filter filter-type="text"></ax-column-filter>
+				<ax-column-view view-type="text" bind-to="supplierDeliveryAddress"></ax-column-view>
+				<ax-column-edit type="custom" style="display:block" width="240px">
+					<ax-autocomplete class="form-control"
+										  tabindex="40" has-input="true"
+										  ng-model="dataItem.supplierDeliveryAddressId"
+										  datasource="$ctrl.$parent.dataSet.addresses"
+										  datasource-filter="$ctrl.$parent.getDatasourceForCompany(datasource,param)"
+										  datasource-filter-param="$parent.$parent.dataItem.supplierId"
+										  on-model-changed="$ctrl.$parent.supplier.getSelectedAddress(selected,$parent.$parent.dataItem)"
+										  order-by="address"
+										  item-id-field="id"
+										  item-display-field="address">
+						<ax-dropdown-list list-height="140px" list-width="870px" list-no-header="false">
+							<ax-column header="Name" bind-to="name" width="150px"></ax-column>
+							<ax-column header="Address" bind-to="address" width="250px"></ax-column>
+							<ax-column header="City" bind-to="city" width="150px"></ax-column>
+							<ax-column header="County" bind-to="county" width="150px"></ax-column>
+							<ax-column header="Country" bind-to="country" width="150px"></ax-column>
+						</ax-dropdown-list>
+						<ax-dropdown-popup template-url="'/app-modules/invoicing/companies/companies-addresses-popup.html'"
+												 caret-class="fa fa-edit"
+												 uib-tooltip="Change addresses datasource"
+												 ctrl="$parent.$ctrl.$parent.supplier.addressesEdit"
+												 open-params="$parent.$parent.$ctrl.$parent.supplier.getDataItemSupplier($parent.$parent.$parent.$parent.dataItem), $parent.$parent.$parent.$parent.dataItem"
+												 popup-height="300px"
+												 popup-relative-left="-150px"
+												 popup-width="950px"></ax-dropdown-popup>
+					</ax-autocomplete>
+					<div>{{dataItem.supplierDeliveryCity}}{{dataItem.supplierDeliveryCounty?', ' + dataItem.supplierDeliveryCounty:''}}{{dataItem.supplierDeliveryCountry?', ' + dataItem.supplierDeliveryCountry:''}}</div>
+				</ax-column-edit>
+			</ax-column>
+			<ax-column header="trans:SupplierBankAccount"
+						  header-title="trans:BankAccount"
+						  editor-column-index="1"
+						  hidden-column
+						  show-in-editor="true"
+						  bind-to="supplierBankAccountId"
+						  double-binding="true"
+						  width="300px">
+				<ax-column-filter filter-type="text"></ax-column-filter>
+				<ax-column-edit type="custom" style="display:block" width="240px">
+					<ax-autocomplete class="form-control"
+										  tabindex="40" has-input="true"
+										  ng-model="dataItem.supplierBankAccountId"
+										  datasource="$ctrl.$parent.dataSet.accounts"
+										  datasource-filter="$ctrl.$parent.getDatasourceForCompany(datasource,param)"
+										  datasource-filter-param="$parent.$parent.dataItem.supplierId"
+										  on-model-changed="$ctrl.$parent.supplier.getSelectedAccount(selected,$parent.$parent.dataItem)"
+										  order-by="bank,account"
+										  item-id-field="id"
+										  item-display-field="account">
+						<ax-dropdown-list list-height="140px" list-width="650px" list-no-header="false">
+							<ax-column header="Account" bind-to="account" width="200px"></ax-column>
+							<ax-column header="Bank" bind-to="bank" width="150px"></ax-column>
+							<ax-column header="Name" bind-to="name" width="150px"></ax-column>
+						</ax-dropdown-list>
+						<ax-dropdown-popup template-url="'/app-modules/invoicing/companies/companies-accounts-popup.html'"
+												 caret-class="fa fa-edit"
+												 ctrl="$parent.$ctrl.$parent.supplier.accountsEdit"
+												 uib-tooltip="Change accounts datasource"
+												 open-params="$parent.$parent.$ctrl.$parent.supplier.getDataItemSupplier($parent.$parent.$parent.$parent.dataItem), $parent.$parent.$parent.$parent.dataItem"
+												 popup-height="300px"
+												 popup-relative-left="-150px"
+												 popup-width="800px"></ax-dropdown-popup>
+					</ax-autocomplete>
+					<div>{{dataItem.supplierBank}}</div>
+				</ax-column-edit>
+			</ax-column>
+
+
+			<ax-column header="trans:Date"
+						  hideable="false"
+						  editor-column-index="2"
+						  bind-to="date"
+						  date-format="dd.MM.yyyy"
+						  edit-type="date"
+						  sortable
+						  width="150px">
+				<ax-column-filter filter-type="date"
+										convert-type="date"
+										show-in-popup="true" show-config="true"></ax-column-filter>
+			</ax-column>
+			<ax-column header="trans:Serial"
+						  hideable="false"
+						  sortable
+						  bind-to="serial"
+						  editor-column-index="2"
+						  edit-type="text"
+						  filter-menu="text"
+						  show-in-editor="true"
+						  width="100px">
+			</ax-column>
+			<ax-column header="trans:Number"
+						  hideable="false"
+						  editor-column-index="2"
+						  sortable
+						  bind-to="number"
+						  edit-type="number"
+						  decimals="0"
+						  style="padding-right:14px"
+						  use-grouping="false"
+						  show-in-editor="true"
+						  width="100px">
+				<ax-column-filter filter-type="number" show-in-popup></ax-column-filter>
+			</ax-column>
+			<ax-column header="trans:Currency"
+						  hideable="false"
+						  editor-column-index="2"
+						  sortable
+						  bind-to="currency"
+						  edit-type="text"
+						  show-in-editor="true"
+						  width="100px">
+				<ax-column-filter filter-type="text" show-in-popup></ax-column-filter>
+			</ax-column>
+			<ax-column header="trans:Customer"
+						  bind-to="customerId"
+						  sortable="customerInvariant"
+						  editor-column-index="3"
+						  width="300px">
+				<ax-column-filter filter-type="text"></ax-column-filter>
+				<ax-column-view view-type="text" bind-to="customerName"></ax-column-view>
+				<ax-column-edit edit-type="autocomplete"
+									 width="240px"
+									 debug="false"
+									 datasource="$ctrl.$parent.dataSet.companies"
+									 on-model-changed="$ctrl.$parent.customer.customerChanged(selected,$parent.$parent.dataItem)"
+									 item-id-field="id"
+									 item-display-field="name"
+									 item-invariant-field="nameInvariant"
+									 link-popup-template-url="'/app-modules/invoicing/companies/companies-popup.html'"
+									 link-popup-caret-class="fa fa-edit"
+									 link-popup-ctrl="$parent.$ctrl.$parent.customer.edit"
+									 link-popup-popup-height="305px"
+									 link-popup-absolute-right="10px"
+									 link-popup-popup-width="1200px">
+				</ax-column-edit>
+			</ax-column>
+
+			<ax-column header="trans:CustomerDeliveryAddress"
+						  header-title="trans:DeliveryAddress"
+						  editor-column-index="3"
+						  hidden-column
+						  show-in-editor="true"
+						  bind-to="customerDeliveryAddressId"
+						  width="300px">
+
+				<ax-column-filter filter-type="text"></ax-column-filter>
+				<ax-column-view view-type="text" bind-to="customerDeliveryAddress"></ax-column-view>
+				<ax-column-edit type="custom" style="display:block" width="240px">
+					<ax-autocomplete class="form-control"
+										  tabindex="40" has-input="true"
+										  ng-model="dataItem.customerDeliveryAddressId"
+										  datasource="$ctrl.$parent.dataSet.addresses"
+										  datasource-filter="$ctrl.$parent.getDatasourceForCompany(datasource,param)"
+										  datasource-filter-param="$parent.$parent.dataItem.customerId"
+										  on-model-changed="$ctrl.$parent.customer.getSelectedAddress(selected,$parent.$parent.dataItem)"
+										  order-by="countryInvariant,cityInvariant,name"
+										  item-id-field="id"
+										  item-display-field="address">
+						<ax-dropdown-list list-height="140px" list-width="870px" list-no-header="false">
+							<ax-column header="Name" bind-to="name" width="150px"></ax-column>
+							<ax-column header="Address" bind-to="address" width="250px"></ax-column>
+							<ax-column header="City" bind-to="city" width="150px"></ax-column>
+							<ax-column header="County" bind-to="county" width="150px"></ax-column>
+							<ax-column header="Country" bind-to="country" width="150px"></ax-column>
+						</ax-dropdown-list>
+						<ax-dropdown-popup template-url="'/app-modules/invoicing/companies/companies-addresses-popup.html'"
+												 caret-class="fa fa-edit"
+												 ctrl="$parent.$ctrl.$parent.customer.addressesEdit"
+												 uib-tooltip="Change addresses datasource"
+												 open-params="$parent.$parent.$ctrl.$parent.customer.getDataItemCustomer($parent.$parent.$parent.$parent.dataItem), $parent.$parent.$parent.$parent.dataItem"
+												 popup-height="300px"
+												 popup-absolute-right="10px"
+												 popup-width="950px"></ax-dropdown-popup>
+					</ax-autocomplete>
+					<div>{{dataItem.customerDeliveryCity}}{{dataItem.customerDeliveryCounty?', ' + dataItem.customerDeliveryCounty:''}}{{dataItem.customerDeliveryCountry?', ' + dataItem.customerDeliveryCountry:''}}</div>
+				</ax-column-edit>
+			</ax-column>
+			<ax-column header="translation:CustomerBankAccount"
+						  header-title="trans:BankAccount"
+						  editor-column-index="3"
+						  hidden-column
+						  show-in-editor="true"
+						  bind-to="customerBankAccountId"
+						  double-binding="true"
+						  width="300px">
+				<ax-column-filter filter-type="text"></ax-column-filter>
+				<ax-column-view type="custom">
+					{{dataItem.customerDeliveryAddress}}{{dataItem.customerDeliveryCity?', ' + dataItem.customerDeliveryCity: ''}}{{dataItem.customerDeliveryCounty?', ' + dataItem.customerDeliveryCounty:''}}
+				</ax-column-view>
+				<ax-column-edit type="custom" style="display:block" width="240px">
+					<ax-autocomplete class="form-control"
+										  tabindex="40" has-input="true"
+										  ng-model="dataItem.customerBankAccountId"
+										  datasource="$ctrl.$parent.dataSet.accounts"
+										  datasource-filter="$ctrl.$parent.getDatasourceForCompany(datasource,param)"
+										  datasource-filter-param="$parent.$parent.dataItem.customerId"
+										  on-model-changed="$ctrl.$parent.customer.getSelectedAccount(selected,$parent.$parent.dataItem)"
+										  order-by="bank,account"
+										  item-id-field="id"
+										  item-display-field="account">
+						<ax-dropdown-list list-height="140px" list-width="650px" list-no-header="false">
+							<ax-column header="Account" bind-to="account" width="200px"></ax-column>
+							<ax-column header="Bank" bind-to="bank" width="150px"></ax-column>
+							<ax-column header="Name" bind-to="name" width="150px"></ax-column>
+						</ax-dropdown-list>
+						<ax-dropdown-popup template-url="'/app-modules/invoicing/companies/companies-accounts-popup.html'"
+												 caret-class="fa fa-edit"
+												 ctrl="$parent.$ctrl.$parent.customer.accountsEdit"
+												 uib-tooltip="Change accounts datasource"
+												 open-params="$parent.$parent.$ctrl.$parent.customer.getDataItemCustomer($parent.$parent.$parent.$parent.dataItem), $parent.$parent.$parent.$parent.dataItem"
+												 popup-height="300px"
+												 popup-absolute-right="10px"
+												 popup-width="800px"></ax-dropdown-popup>
+					</ax-autocomplete>
+					<div>{{dataItem.customerBank}}</div>
+				</ax-column-edit>
+
+			</ax-column>
+			<ax-column header="trans:Total"
+						  editor-column-index="2"
+						  hideable="false"
+						  bind-to="total"
+						  show-in-editor="false"
+						  width="150px">
+				<ax-column-filter filter-type="number" show-in-popup></ax-column-filter>
+				<ax-column-view double-binding="true" view-type="number" decimals="2" style="font-weight:bold"></ax-column-view>
+			</ax-column>
+		</ax-grid>
+		<ax-table config="invoices.details"
+					 parent-config="invoices"
+					 child-name="invoices.details"
+					 api-controller="invoices-details"
+					 load-data-responses="descriptions=>dataSet.descriptions;emailTemplates=>dataSet.emailTemplates"
+					 order-by="position"
+					 item-id-field="id"
+					 child-index="1"
+					 left-freezed-columns="2"
+					 right-freezed-columns="1"
+					 edit-row="inline-cell"
+					 apply-changes-on-save="true"
+					 auto-focus="true"
+					 customizable-freezed-columns="false"
+					 customizable-config="false"
+					 customizable-edit-mode="false"
+					 export-disabled="true"
+					 columns-autofit-enabled="false"
+					 auto-load-data="true"
+					 style="left:0;right:initial;width:100%;top:309px;bottom:0;min-height:195px">
+			<ax-toolbar min-width="600">
+				<label class="header-title" toolbar="left">{{::trans("InvoiceDetails")}}</label>
+
+				<ax-button button-type="settings"
+							  ng-show="$ctrl.canAdd() "
+							  show-title="false"
+							  style="margin-right:3px"
+							  toolbar="right"></ax-button>
+				<ax-button button-type="maximize"
+							  toolbar="right"></ax-button>
+			</ax-toolbar>
+			<ax-groups>
+				<ax-all-levels-calculations show-on="footer">
+					<ax-calculation column="trans:Value" expression="dataItem.value" name="value" aggregate-type="sum" display-label="false">
+						<ax-calculation-result class="calculation-result">
+							{{dataItem.calculations.value.toLocaleString("ro-RO",{minimumFractionDigits: 2,maximumFractionDigits: 2, useGrouping:true})}}
+						</ax-calculation-result>
+					</ax-calculation>
+					<ax-calculation column="trans:VatValue" expression="dataItem.vatValue" name="vat" aggregate-type="sum" display-label="false">
+						<ax-calculation-result class="calculation-result">
+							{{dataItem.calculations.vat.toLocaleString("ro-RO",{minimumFractionDigits: 2,maximumFractionDigits: 2, useGrouping:true})}}
+						</ax-calculation-result>
+					</ax-calculation>
+				</ax-all-levels-calculations>
+				<ax-group expression="true">
+					<ax-group-footer>
+						<ax-group-display style="text-align:right;display:block;width:100%">
+							<div class="group-value">TOTAL DE PLATA</div>
+						</ax-group-display>
+					</ax-group-footer>
+					<ax-calculation column="trans:VatValue" expression="dataItem.value + dataItem.vatValue" name="total" aggregate-type="sum" display-label="false">
+						<ax-calculation-result class="calculation-result">
+							{{dataItem.calculations.total.toLocaleString("ro-RO",{minimumFractionDigits: 2,maximumFractionDigits: 2, useGrouping:true})}}
+						</ax-calculation-result>
+					</ax-calculation>
+				</ax-group>
+				<ax-group expression="true">
+					<ax-group-footer>
+						<ax-group-display style="text-align:right;display:block;width:100%">
+						</ax-group-display>
+					</ax-group-footer>
+				</ax-group>
+			</ax-groups>
+			<ax-column header="Icons" show-header="false" view-type="gutter-icons" width="42px"></ax-column>
+			<ax-column header="Index"
+						  hideable="false"
+						  show-header="false"
+						  bind-to="position"
+						  width="60px">
+				<ax-column-view view-type="number" decimals="0" use-grouping="false"></ax-column-view>
+				<ax-column-edit edit-type="number"></ax-column-edit>
+			</ax-column>
+			<ax-column header="trans:Description"
+						  bind-to="description"
+						  width="100%">
+				<ax-column-edit edit-type="custom">
+					<ax-autocomplete class="form-control"
+										  tabindex="40"
+										  debug="false"
+										  has-input="true"
+										  ng-model="$parent.dataItem.description"
+										  datasource="$ctrl.$parent.dataSet.descriptions"
+										  item-id-field="description"
+										  item-display-field="description">
+					</ax-autocomplete>
+
+				</ax-column-edit>
+			</ax-column>
+			<ax-column header="trans:Unit"
+						  bind-to="unit"
+						  double-binding="true"
+						  edit-type="text"
+						  width="70px">
+			</ax-column>
+			<ax-column header="trans:VatPercent"
+						  bind-to="vat"
+						  view-type="number"
+						  double-binding="true"
+						  decimals="0"
+						  width="55px">
+			</ax-column>
+			<ax-column header="trans:Quantity"
+						  bind-to="quantity"
+						  hideable="false"
+						  view-type="number"
+						  edit-type="number"
+						  decimals="0"
+						  width="80px">
+			</ax-column>
+			<ax-column header="trans:Price"
+						  hideable="false"
+						  bind-to="price"
+						  double-binding="true"
+						  view-type="number"
+						  edit-type="number"
+						  decimals="4"
+						  width="100px">
+			</ax-column>
+			<ax-column header="trans:Value"
+						  hideable="false"
+						  bind-to="value"
+						  view-type="number"
+						  decimals="2"
+						  double-binding="true"
+						  width="100px">
+			</ax-column>
+			<ax-column header="trans:VatValue"
+						  bind-to="vatValue"
+						  view-type="number"
+						  double-binding="true"
+						  decimals="2"
+						  width="120px">
+			</ax-column>
+			<ax-column header="Del" show-header="false" view-type="crud-buttons" width="42px"></ax-column>
+		</ax-table>
+	</div>
+</div>

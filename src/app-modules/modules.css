@@ -1,0 +1,8 @@
+.cke_top{
+	max-height: 58px !important;
+}
+
+.cke_bottom {
+	height: 0 !important;
+	padding:0 !important;
+}

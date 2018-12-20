@@ -1,0 +1,83 @@
+<header role="banner">
+	<div class="app-header inline">
+		<button type="button"
+				  ng-if="!dataStore.isMobileDevice"
+				  class="btn icon fa"
+				  style="width: 30px; color: white;"
+				  uib-tooltip="Toggle show left pane"
+				  tooltip-placement="bottom-left"
+				  tooltip-append-to-body="true"
+				  ng-class="{'fa-angle-double-left': !dataStore.leftPaneCollapsed, 'fa-angle-double-right':dataStore.leftPaneCollapsed}"
+				  ng-click="leftPaneToggle()"
+		></button>
+		<ax-dropdown-popup ctrl="mainMenu"
+								 style="width: 30px; padding: 0;"
+								 ng-if="dataStore.leftPaneCollapsed"
+								 btn-class="btn icon"
+								 btn-style="text-align:center"
+								 caret-class="fa fa-bars"
+								 uib-tooltip="Open main menu in a popup"
+								 btn-text=""
+								 close-on-blur="true"
+								 popup-class="main-menu"
+								 popup-width="{{dataStore.leftPanelWidth()}}px"
+								 popup-absolute-left="0"
+								 popup-absolute-top="30"
+								 popup-absolute-bottom="0"
+								 template-url="'/app-modules/common/main/main-menu.html'">
+		</ax-dropdown-popup>
+		<button type="button" ng-click="locationReload()"
+				  style="color: white;width: 30px"
+				  ng-if="dataStore._isDevelpoment"
+				  class="btn icon fa fa-refresh"
+				  uib-tooltip="Click to reload page"></button>
+		<ax-dropdown-list datasource="dataSet.owners"
+								dropdown-model="dataSet.currentOwner"
+								dropdown-model-type="object"
+								on-selection-change="owner.onChange()"
+								btn-class="btn btn-primary"
+								btn-style="color:white;"
+								popup-class="theme-list"
+								list-width="100%"
+								list-height="140px"
+								list-item-id-field="name"
+								style="width:215px;margin:auto 5px"></ax-dropdown-list>
+			<ax-dropdown-popup ctrl="sendEmail"
+									 style="width:50px !important;"
+									 uib-tooltip="Trimite mesaj"
+									 tooltip-placement="bottom"
+									 id="send-email"
+									 btn-class="btn icon fa fa-envelope-o"
+									 btn-html="<i class='fa fa-paper-plane-o'></i><i class='fa fa-envelope-o></i>"
+									 popup-class="dropdown-popup-menu"
+									 caret-class="fa"
+									 close-on-blur="false"
+									 popup-width="auto"
+									 template-url="'app-modules/common/email/email.html'"
+			>
+			</ax-dropdown-popup>
+
+		<div class="inline" style="position: absolute;right: 0;top: 0;height:100%">
+			<ax-dropdown-popup ctrl="currentUser"
+									 style="width: auto !important; padding: 0;margin: auto 5px; "
+									 id="current-user"
+									 btn-class="btn btn-primary"
+									 btn-html="<div>{{dataStore.user.info.numeComplet}}</div>"
+									 popup-class="dropdown-popup-menu"
+									 caret-class="fa fa-caret-down"
+									 close-on-blur="true"
+									 popup-width="auto"
+									 popup-absolute-right="5px">
+				<ul style="width: 136px;margin-bottom: 0">
+					<li><a ui-sref="profile" ng-click="popupClose()">Profile<i class="fa fa-user right" style="padding-top:3px;padding-right:3px"></i></a></li>
+					<li ng-click="launcher.logout();">Sign out<i class="fa fa-sign-out right" style="padding-top:3px;padding-right:3px"></i></li>
+				</ul>
+			</ax-dropdown-popup>
+		</div>
+
+	</div>
+</header>
+<main>
+	<div id="left-pane" ng-if="!dataStore.leftPaneCollapsed" ax-dynamic-template-url="'/app-modules/common/main/main-menu.html'"></div>
+	<div id="right-pane" ui-view="content" style="left:0" ng-style="{left:dataStore.rightPanelCssLeft +'px'}" ng-cloak></div>
+</main>

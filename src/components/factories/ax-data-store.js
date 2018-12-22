@@ -18,7 +18,7 @@ class axDataStore {
 	}
 
 	getFullSystemName() {
-		return this.applicationInfo.name + " " + this.applicationInfo.type + " v" + this.applicationInfo.version;
+		return document.title;
 	}
 
 	copyright() {

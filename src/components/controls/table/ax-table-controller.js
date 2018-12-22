@@ -168,8 +168,7 @@ class axTableController {
 				$controller.element.linked.css({"visibility": ""});
 
 			});
-		}
-		else this.render();
+		} else this.render();
 	}
 
 	hide() {
@@ -241,8 +240,7 @@ class axTableController {
 			if (goToDataItem !== false) {
 				let dataItem = $controller.getCollection("visibleItems")[index];
 				$controller.goToDataItem(dataItem, false, callback);
-			}
-			else if (callback) callback();
+			} else if (callback) callback();
 			if (goToDataItem === false) $controller.$currentItemChanged($controller.currentItem);
 		}, 300);
 		return true;
@@ -503,8 +501,7 @@ class axTableController {
 				//{ dataItem: dataItem } este necesar la filterPane by courses-skills
 				if (dropdown.onSelectionChange) dropdown.onSelectionChange({dataItem: dataItem});
 			});
-		}
-		else this.onSelectionChange(dataItem);
+		} else this.onSelectionChange(dataItem);
 	}
 
 	addEmptyRowData() {
@@ -537,8 +534,7 @@ class axTableController {
 				let dataItem;
 				if (this.attrs.selectableRowsModelType === 'object') {
 					dataItem = this.selectableRowsModel[0];
-				}
-				else if (this.attrs.selectableRowsModelType === 'id-field') {
+				} else if (this.attrs.selectableRowsModelType === 'id-field') {
 					dataItem = this.datasource.findObject(this.selectableRowsModel[0], this.attrs.itemIdField);
 
 				} else console.error("Code is not writed yet for selectableRowsModelType=" + this.attrs.selectableRowsModelType + "!!!!");
@@ -794,8 +790,7 @@ class axTableController {
 						if ($(this).attr("index") <= index) {
 							newIndex = $(this).attr("index");
 							return true;
-						}
-						else return false;
+						} else return false;
 					});
 
 				} else { // nagigate to the bottom
@@ -804,16 +799,14 @@ class axTableController {
 							newIndex = $(this).attr("index");
 							found = 1;
 							return true;
-						}
-						else return false;
+						} else return false;
 					});
 				}
 				tr = angular.element(tables).find("tr[index=" + newIndex + "]");
 
 				if (tr && tr.length >= 0) index = tr.attr("index");
 				else return;
-			}
-			else tr = $controller.getCurrentAllTr(index);
+			} else tr = $controller.getCurrentAllTr(index);
 			if (tr.length === 0) {
 				if ($controller.groups.defs.length > 0) {
 					if (rowIndexDiff >= 0)
@@ -1313,8 +1306,7 @@ class axTableController {
 				if (self.currentItem && self.$paginator && self.isLastNavigableItem(self.currentItem)) {
 					self.$paginator.goToNextPage(index);
 					return canEdit;
-				}
-				else {
+				} else {
 					self.goToRow(index, columnIndex);
 					return canEdit;
 				}
@@ -1333,8 +1325,7 @@ class axTableController {
 			if (this.attrs.editRow === "editor") {
 				this.$$grid.$$editor.open();
 				//this.$$grid.$$editor.form.edit();
-			}
-			else if (this.attrs.editRow === "inline") this.update(dataItem);
+			} else if (this.attrs.editRow === "inline") this.update(dataItem);
 			else if (this.attrs.editRow === "inline-cell") this.changeEdit();
 			return true;
 		} else if (ctrlDown && event.keyCode === keyCodes.letter.S) {
@@ -1343,8 +1334,7 @@ class axTableController {
 			if (this.parentConfig && this.parentConfig.$ctrl.$$grid.$$editor) {
 				if (!this.parentConfig.$ctrl.$$grid.$$editor.opened) return true;
 				this.parentConfig.$ctrl.$$grid.$$editor.form.$ctrl.save();
-			}
-			else if (this.attrs.parentConfig) this.parentConfig.$ctrl.save(this.parentConfig.$ctrl.currentItem, false, true);
+			} else if (this.attrs.parentConfig) this.parentConfig.$ctrl.save(this.parentConfig.$ctrl.currentItem, false, true);
 			else if (["inline", "inline-cell"].includes(this.attrs.editRow)) this.save(dataItem, false, true);
 			return true;
 		} else if (!canEdit) {
@@ -1569,8 +1559,7 @@ class axTableController {
 						//this.debug.log("Modificari", fieldName, "Original:", clone[fieldName], "current", dataItem[fieldName], 'status', status);
 						if (status === "dirty") {
 							dataItem[fieldName] = clone[fieldName];
-						}
-						else editing = true;
+						} else editing = true;
 						editField = fieldName;
 						break;
 					}
@@ -1826,14 +1815,25 @@ class axTableController {
 					}
 					$controller.datasourceSet(dataItems);
 
-					if ($controller.loadDataCallback) $controller.loadDataCallback(response);
+					if ($controller.config.loadDataCallback) $controller.config.loadDataCallback(response);
 					if (response && response.loader) response.loader.remove();
 					if (removeSpinner) removeSpinner();
+					$controller.removeViewLoader.call($controller);
 					if (callback) callback();
 
 				}
 
 			});
+	}
+
+	removeViewLoader(fromEditor) {
+		if ((fromEditor || !this.$$grid || !this.$$grid.$$editor) && this.$parent.loader) {
+			this.$timeout(() => {
+				this.$parent.loader.remove();
+				if (this.$parent.$element) this.$parent.$element.slideShow("left");
+			});
+		}
+
 	}
 
 	prepareForm(title, readOnly, dataItem, $controller, extra) {
@@ -2109,8 +2109,7 @@ class axTableController {
 			if ($controller.attrs.pageSize === "ALL") {
 				if ($controller.$paginator.toIndex === totalRecords) $controller.$paginator.fromIndex = Math.max(1, $controller.$paginator.toIndex - pageSize + 1);
 				$controller.setVirtualScrollPosition($controller.calculateScrollTop($controller.$paginator.fromIndex), true, 1, true);
-			}
-			else this.goToPage(this.lastPage, totalRecords - 1);
+			} else this.goToPage(this.lastPage, totalRecords - 1);
 
 		};
 		clientPaginator.goToPreviousPage = function (index) {
@@ -2379,7 +2378,7 @@ class axTableController {
 		this.parentItem = parentItem;
 		let self = this;
 		if (this.currentParentItemChanged) this.currentParentItemChanged();
-		if (this.attrs.autoLoadData === "true" ) {
+		if (this.attrs.autoLoadData === "true") {
 			this.loadData(this, false, function () {
 				self.$timeout(function () {
 					self.setCurrentItemToFirstItem();
@@ -2397,8 +2396,7 @@ class axTableController {
 		if (data.length === 0) {
 			this.currentItem = null;
 			this.currentRowIndex = -1;
-		}
-		else {
+		} else {
 			this.currentItem = data[0];
 			let index = this.dataItemGetIndex(this.currentItem, "viewed");
 			this.currentRowIndex = 0;
@@ -2844,8 +2842,7 @@ class axTableController {
 		if (this.config.dataAdapter && this.config.dataAdapter.parsingCollection !== false) {
 			this.datasource = this.config.dataAdapter.parseCollection(data);
 			this.timeStamp(false, 'datasource loaded', "dataAdapter parseCollection");
-		}
-		else this.datasource = data;
+		} else this.datasource = data;
 		if (this.attrs.datasource) this.$parse(this.attrs.datasource).assign(this.scope().$parent, data);
 		let $controller = this;
 		if (this.controllerLoaded) {
@@ -2943,8 +2940,7 @@ class axTableController {
 			this.pivotTableShow.popupClose();
 			changeEvent.call($controller);
 			//this.$timeout(function () { changeEvent.call($controller); },200);
-		}
-		else changeEvent.call($controller);
+		} else changeEvent.call($controller);
 	}
 
 	orderApply(goToRow, dataItem, loadingData) {
@@ -3030,8 +3026,7 @@ class axTableController {
 			var headerHeight = this.$layout.header.height();
 			//if (this.virtualTableHeight > (this.$layout.scroller.visibleHeight() - headerHeight)) this.virtualTableHeight += parseInt(this.attrs.rowDataHeight);
 			// this.debug.log("createVirtualTable:", this.virtualTableHeight, recordsShowable);
-		}
-		else {
+		} else {
 			var scrollerTable = this.getDomElement('>ax-table-content>[role=table-scroller] > table');
 			this.virtualTableHeight = scrollerTable.height();//+ parseFloat(scrollerTable.css('margin-top'));
 		}
@@ -3201,22 +3196,17 @@ class axTableController {
 					if (config.matchCase) {
 						if (config.searchType === "Starts with") {
 							if (!itemValue.startsWith(value)) return false;
-						}
-						else if (config.searchType === "Ends with") {
+						} else if (config.searchType === "Ends with") {
 							if (!itemValue.endsWith(value)) return false;
-						}
-						else if (!itemValue.includes(value)) return false;
+						} else if (!itemValue.includes(value)) return false;
 					} else {
 						if (config.searchType === "Starts with") {
 							if (!itemValue.toLowerCase().startsWith(value.toLowerCase())) return false;
-						}
-						else if (config.searchType === "Ends with") {
+						} else if (config.searchType === "Ends with") {
 							if (!itemValue.toLowerCase().endsWith(value.toLowerCase())) return false;
-						}
-						else if (!itemValue.toLowerCase().includes(value.toLowerCase())) return false;
+						} else if (!itemValue.toLowerCase().includes(value.toLowerCase())) return false;
 					}
-				}
-				else if (!itemValue.toString().toLowerCase().includes(value.toLowerCase())) return false;
+				} else if (!itemValue.toString().toLowerCase().includes(value.toLowerCase())) return false;
 			}
 		}
 		return true;
@@ -3695,12 +3685,10 @@ class axTableController {
 			else if ($$controllerStore.dataReload) {
 				//$controller.scrollLeft = 0;
 				$controller.datasourceSet($controller.getCollection("initial"));
-			}
-			else if (params.datasource) {
+			} else if (params.datasource) {
 				//$controller.scrollLeft = 0;
 				$controller.datasourceSet(params.datasource);
-			}
-			else if ($controller.$dataSource.config.orderBy !== initialOrderBy) $controller.orderApply(false, $controller.currentItem, true);
+			} else if ($controller.$dataSource.config.orderBy !== initialOrderBy) $controller.orderApply(false, $controller.currentItem, true);
 			else $controller.filterApply(false, $controller.currentItem, true);
 			if (params.animation)
 				$controller.element.linked.find(">ax-table-content").slideShow("left", 500, function () {
@@ -3793,7 +3781,7 @@ class axTableController {
 		this.$layout = new axTableLayout(this, scope);
 		if ($controller._show) $controller.$layout.init();
 		$controller.debug.log("ctrl datasource ", attrs.datasource);
-		if (attrs.datasource && attrs.datasource !== 'remote' && !$controller.parentConfig ) {
+		if (attrs.datasource && attrs.datasource !== 'remote' && !$controller.parentConfig) {
 			// if (attrs.editRow) {
 			// 	console.error("ax-table/ax-grid datasource attribute is not compatible with edit-row attribute. When datasource is editable, use datasourceSet controller method.", attrs.datasource);
 			// 	scope.$ctrl.setAttribute("datasource", "");
@@ -3811,7 +3799,7 @@ class axTableController {
 		}
 		if (attrs.datasource === 'remote' && !angular.isDefined($controller.dataLoaded)) {
 			$controller.dataLoaded = false;
-			if (!$controller.parentConfig && ($controller.autoLoadData === "true" || $$controllerStore.dataReload) && !$$controllerStore.compiling ) $controller.loadData();
+			if (!$controller.parentConfig && ($controller.autoLoadData === "true" || $$controllerStore.dataReload) && !$$controllerStore.compiling) $controller.loadData();
 		} else
 			$controller.dataLoaded = (attrs.datasource) ? false : this.datasourceSet([]);
 	}

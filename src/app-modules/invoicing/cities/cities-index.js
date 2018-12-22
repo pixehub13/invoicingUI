@@ -3,6 +3,8 @@
 	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataStore", "$element"];
 
 	function controller($scope, $adapter, $timeout, axDataStore, $element) {
+		$scope.loader = axDataStore.loader("#right-pane");
+		$scope.$element = $element;
 		$scope.dataStore = axDataStore;
 		$scope.country = $scope.$parent.launcher ? $scope.$parent.launcher.dataItem : null;
 		$scope.editingMode = $scope.$parent.launcher ? "popup" : ($scope.$parent.$ctrl && $scope.$parent.$ctrl.attributes && $scope.$parent.$ctrl.attributes.config.includes("$$editor.form") ? "editor" : "page");

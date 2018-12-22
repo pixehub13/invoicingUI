@@ -70,36 +70,36 @@
 					  edit-type="text"
 					  width="100px"
 		>
-			<ax-column-header row-index="1" colspan="5">Carte Identitate</ax-column-header>
-			<ax-column-header row-index="2">Serie</ax-column-header>
+			<ax-column-header row-index="1" colspan="5">{{::trans('IdentityCard')}}</ax-column-header>
+			<ax-column-header row-index="2">{{::trans('CiSeries')}}</ax-column-header>
 		</ax-column>
 		<ax-column header="trans:CiNumber"
 					  bind-to="CiNumber"
 					  edit-type="text"
 					  width="100px"
 		>
-			<ax-column-header row-index="2">Numar</ax-column-header>
+			<ax-column-header row-index="2">{{::trans('CiNumber')}}</ax-column-header>
 		</ax-column>
 		<ax-column header="trans:CiIssuedBy"
 					  bind-to="CiIssuedBy"
 					  edit-type="text"
 					  width="200px"
 		>
-			<ax-column-header row-index="2">S.P.C.E.P.</ax-column-header>
+			<ax-column-header row-index="2">{{::trans('CiIssuedBy')}}</ax-column-header>
 		</ax-column>
 		<ax-column header="trans:CiDate"
 					  bind-to="CiDate"
 					  edit-type="date"
 					  width="150px"
 		>
-			<ax-column-header row-index="2">Data eliberare</ax-column-header>
+			<ax-column-header row-index="2">{{::trans('CiDate')}}</ax-column-header>
 		</ax-column>
 		<ax-column header="trans:SecurityNumber"
 					  bind-to="CNP"
 					  edit-type="text"
 					  width="150px"
 		>
-			<ax-column-header row-index="2">CNP</ax-column-header>
+			<ax-column-header row-index="2">{{::trans('SecurityNumber')}}</ax-column-header>
 		</ax-column>
 	</ax-grid>
 </div>

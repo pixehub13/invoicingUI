@@ -56,6 +56,11 @@ class Owner extends BaseModel
 			$exception->field = "companyId";
 			throw $exception;
 		}
+		if (!isset($this->item->currencies)) {
+			$exception = new Exception("Currencies is required");
+			$exception->field = "currencies";
+			throw $exception;
+		}
 		If (isset($this->item->stampPath)) $this->item->stampPath = explode("?", $this->item->stampPath)[0];
 		If (isset($this->item->logoPath)) $this->item->logoPath = explode("?", $this->item->logoPath)[0];
 		If (isset($this->item->vatRegistred) && ($this->item->vatRegistred == 'true' || $this->item->vatRegistred == '1')) $this->item->vatRegistred = 1;

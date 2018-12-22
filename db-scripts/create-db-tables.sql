@@ -29,6 +29,8 @@ CREATE TABLE `cities` (
   `countryId` mediumint(9) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UniqueCity` (`countryId`,`nameInvariant`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `nameInvariant_UNIQUE` (`nameInvariant`),
   KEY `id` (`id`),
   KEY `city` (`name`),
   KEY `countryId` (`countryId`),
@@ -60,12 +62,18 @@ CREATE TABLE `companies` (
   `administratorName` varchar(150) DEFAULT NULL,
   `countryId` mediumint(9) DEFAULT NULL,
   `county` varchar(50) DEFAULT NULL,
-  `cityId` mediumint(9) DEFAULT NULL,
+  `cityId` mediumint(9) unsigned DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
   `code` varchar(40) DEFAULT NULL,
   `tradeRegister` varchar(40) DEFAULT NULL,
-  PRIMARY KEY (`id`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`,`name`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `nameInvariant_UNIQUE` (`nameInvariant`),
+  KEY `country_idx` (`countryId`),
+  KEY `city_idx` (`cityId`),
+  CONSTRAINT `city_fk` FOREIGN KEY (`cityId`) REFERENCES `cities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `country_fk` FOREIGN KEY (`countryId`) REFERENCES `countries` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +82,7 @@ CREATE TABLE `companies` (
 
 LOCK TABLES `companies` WRITE;
 /*!40000 ALTER TABLE `companies` DISABLE KEYS */;
-INSERT INTO `companies` VALUES (1,'Easy Software S.r.l.','Easy Software S r l ','Bogdan-Mihai Ionescu',261,'Prahova',135,'str. Vornicei nr. 13, bloc 67B, ap. 3, cod postal 100285','14165963','J29-788 -2001'),(2,'Software Consulting S.r.l.','Software Consulting S r l ','Company Admin',261,'Sector 1',62,'Str. Nicolae Titulescu nr. 21','2445879','J29-2548-2011'),(3,'New Client','New Client','Admin test',269,'County',30,'24  Maliboo street',NULL,NULL),(4,'New Client 2','New Client 2','Admin name',271,'County',52,'24 My star bv.',NULL,NULL);
+INSERT INTO `companies` VALUES (1,'My Private Company','My Private Company','Company Adminsitrator',261,'Sector1',62,'str. Nicolae Titulescu nr. 24','1425896','J40-7238 -2010'),(5,'First Customer Ltd','First Customer Ltd','Customer Admin',141,'County 1',85,'34 Bulevard street','1545263','j24-230222');
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +101,7 @@ CREATE TABLE `companies-accounts` (
   `companyId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `customerId` (`companyId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +110,7 @@ CREATE TABLE `companies-accounts` (
 
 LOCK TABLES `companies-accounts` WRITE;
 /*!40000 ALTER TABLE `companies-accounts` DISABLE KEYS */;
-INSERT INTO `companies-accounts` VALUES (1,'Cont Curent','Raiffeisen Bank ag. Dristor Bucuresti','RO58RZBR00xxxxxxxxxxxxxx',1),(2,'Cont curent','Ing Bank N.V. Amsterdam','RO51INGB0002654899',2),(3,'current','ING Banck','ROINGN12423512621',3),(4,'sfgjdfgj','sdfhsfj','asdgfahgadfh',3),(5,'ssssssssss','ssssssssss','aaaaaaaaaaa',3),(6,'current acount','ING','ROING 21531362762457',4);
+INSERT INTO `companies-accounts` VALUES (1,'Cont Curent','Raiffeisen Bank ag. Dristor Bucuresti','RO58RZBR00xxxxxxxxxxxxxx',1),(2,'current','ING','125313461276',5);
 /*!40000 ALTER TABLE `companies-accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,14 +124,18 @@ DROP TABLE IF EXISTS `companies-addresses`;
 CREATE TABLE `companies-addresses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
-  `countryId` int(11) DEFAULT NULL,
+  `countryId` mediumint(8) DEFAULT NULL,
   `county` varchar(50) DEFAULT NULL,
-  `cityId` int(11) DEFAULT NULL,
+  `cityId` mediumint(8) unsigned DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
   `companyId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `customer_idx` (`companyId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  KEY `customer_idx` (`companyId`),
+  KEY `city_fk` (`cityId`),
+  KEY `companies-addresses_country_fk` (`countryId`),
+  CONSTRAINT `companies-addresses_city_fk` FOREIGN KEY (`cityId`) REFERENCES `cities` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `companies-addresses_country_fk` FOREIGN KEY (`countryId`) REFERENCES `countries` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +144,7 @@ CREATE TABLE `companies-addresses` (
 
 LOCK TABLES `companies-addresses` WRITE;
 /*!40000 ALTER TABLE `companies-addresses` DISABLE KEYS */;
-INSERT INTO `companies-addresses` VALUES (1,'Punct de lucru',261,'Sector 2',62,'Aleea Fizicienilor nr. 8',1),(2,'sediu',261,'Sector 1',171,'Str. Nicolae Titulescu nr. 21',2),(3,'test1',267,'Colunty',23,'24 Maliboo bv.',3),(4,'Vnew',268,'zsfsdg',26,'sdfahgsadhsa',1),(5,'test2',268,'asdasfasfg',27,'aaaaaaaaaa',3),(6,'seat',271,'County',52,'24 My bulevard bv.',4);
+INSERT INTO `companies-addresses` VALUES (1,'Punct de lucru',261,'Sector 2',62,'Aleea Fizicienilor nr. 8',1),(7,'seat',141,'County 1',85,'34 Bulevard street',5);
 /*!40000 ALTER TABLE `companies-addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +164,7 @@ CREATE TABLE `companies-email-templates` (
   `message` text,
   `companyId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +173,7 @@ CREATE TABLE `companies-email-templates` (
 
 LOCK TABLES `companies-email-templates` WRITE;
 /*!40000 ALTER TABLE `companies-email-templates` DISABLE KEYS */;
-INSERT INTO `companies-email-templates` VALUES (4,'supplier-contact@gmail.com','Service 124/2018','customer-contact@gmail.com','Invoice  {{InvoiceNumber}} - {{SupplierName}}','Am emis factura&nbsp;<b>{{InvoiceNumber}}&nbsp;</b>&nbsp;din data <b>{{InvoiceDate}}&nbsp;</b>&nbsp;pt. activitatea din luna&nbsp;<b>{{PreviousMonthName}}&nbsp;&nbsp;</b>conform contract 152/2018. Vezi atasament!&nbsp;<br />\nTe rog trimite-mi un email de confirmare primire factura. Multumesc!<br />\nCu respect,<br />\nBogdan-Mihai Ionescu',2);
+INSERT INTO `companies-email-templates` VALUES (1,'Supplier Contact<supplier-contact@gmail.com>','Contract 140/2017','Customer Contact<customer-contact@gmail.com>','Invoice  {{InvoiceNumber}} from  {{SupplierName}} ','The invoice&nbsp;&nbsp;<strong>{{InvoiceNumber}}</strong> from&nbsp;&nbsp;<strong>{{InvoiceDate}}</strong> was generated for&nbsp;&nbsp;<strong>{{PreviousMonthName}}</strong>&nbsp; activity, based on contract <strong>140/2017</strong>.<br />\n<br />\nBest regards,<br />\n<strong>Supplier Contact</strong>',1),(2,'Supplier Contact<supplier-contact@gmail.com>','Contract 140/2017','Customer Contact<customer-contact@gmail.com>','Invoice  {{InvoiceNumber}} from  {{SupplierName}}','The invoice&nbsp;&nbsp;<strong>{{InvoiceNumber}}</strong> from&nbsp;&nbsp;<strong>{{InvoiceDate}}</strong> was generated for&nbsp;&nbsp;<strong>{{PreviousMonthName}}</strong>&nbsp; activity, based on contract <strong>140/2017</strong>.<br />\n<br />\nBest regards,<br />\n<strong>Supplier Contact</strong>',5);
 /*!40000 ALTER TABLE `companies-email-templates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,7 +190,7 @@ CREATE TABLE `companies-emails` (
   `email` varchar(255) DEFAULT NULL,
   `companyId` mediumint(9) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +199,7 @@ CREATE TABLE `companies-emails` (
 
 LOCK TABLES `companies-emails` WRITE;
 /*!40000 ALTER TABLE `companies-emails` DISABLE KEYS */;
-INSERT INTO `companies-emails` VALUES (1,'Bogdan-Mihai Ionescu','bogdanim36@gmail.com',1),(2,'Company Admin','company.admin@software.consulting.ro',2);
+INSERT INTO `companies-emails` VALUES (1,'Admin','test@gmail.com',1);
 /*!40000 ALTER TABLE `companies-emails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,7 +216,7 @@ CREATE TABLE `companies-phones` (
   `companyId` mediumint(9) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +225,7 @@ CREATE TABLE `companies-phones` (
 
 LOCK TABLES `companies-phones` WRITE;
 /*!40000 ALTER TABLE `companies-phones` DISABLE KEYS */;
-INSERT INTO `companies-phones` VALUES (1,'0730740392',1,'Bogdan-Mihai Ionescu'),(2,'2458963',2,'Company Admin');
+INSERT INTO `companies-phones` VALUES (1,'24589663',1,'Admin');
 /*!40000 ALTER TABLE `companies-phones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,7 +241,8 @@ CREATE TABLE `countries` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `nameInvariant` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `countryInvariant_UNIQUE` (`nameInvariant`)
+  UNIQUE KEY `countryInvariant_UNIQUE` (`nameInvariant`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=307 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -277,13 +290,14 @@ CREATE TABLE `invoices` (
   `userId` int(11) DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT NULL,
   `currency` char(5) DEFAULT NULL,
+  `vatRegistred` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `number_UNIQUE` (`number`),
+  UNIQUE KEY `number_UNIQUE` (`number`,`ownerId`,`serial`),
   KEY `deliveryCountry` (`customerDeliveryCountryId`),
   KEY `customer` (`customerId`),
   KEY `deliveryCity` (`customerDeliveryCityId`),
   KEY `date` (`date`)
-) ENGINE=InnoDB AUTO_INCREMENT=165743 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +306,7 @@ CREATE TABLE `invoices` (
 
 LOCK TABLES `invoices` WRITE;
 /*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
-INSERT INTO `invoices` VALUES (165741,1,1,'Aleea Scolarilor nr. 8','Sector 2',62,261,1,NULL,'2018-09-24','ES',3980,2,0,2,'Str. Departateanu nr. 27',261,'Sector 1',62,2,'Ing Bank N.V. Amsterdam',6983.85,0,1,NULL,'RON'),(165742,1,1,'Aleea Fizicienilor nr. 8','Sector 2',62,261,1,NULL,'2018-12-12','ES',3981,4,0,6,'24 My bulevard bv.',271,'County',52,6,'ING',27916.8,0,1,NULL,'RON');
+INSERT INTO `invoices` VALUES (1,1,1,'Aleea Fizicienilor nr. 8','Sector 2',62,261,1,NULL,'2018-12-22','ES',1,5,0,7,'34 Bulevard street',141,'County 1',85,2,'ING',18583.2,0,1,NULL,'RON',0),(3,1,1,'Aleea Fizicienilor nr. 8','Sector 2',62,261,1,NULL,'2018-12-22','ES',2,5,0,7,'34 Bulevard street',141,'County 1',85,2,'ING',5528.5,882.702,1,NULL,'RON',1);
 /*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +333,7 @@ CREATE TABLE `invoices-details` (
   PRIMARY KEY (`id`),
   KEY `invoices-details_invoices_id_fk` (`invoiceId`),
   CONSTRAINT `invoices-details_invoices_id_fk` FOREIGN KEY (`invoiceId`) REFERENCES `invoices` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +342,7 @@ CREATE TABLE `invoices-details` (
 
 LOCK TABLES `invoices-details` WRITE;
 /*!40000 ALTER TABLE `invoices-details` DISABLE KEYS */;
-INSERT INTO `invoices-details` VALUES (36,165741,1,'SERVICE CF. CTR. 152/2018, 17-30 SEPT. 2018',1500,'EUR',4.6559,6983.85,0,0,0,0),(37,165742,1,'Service for month AUgust 2018 contract 140/2017',6000,'EUR',4.6528,27916.8,0,0,0,0);
+INSERT INTO `invoices-details` VALUES (1,1,1,'Service',4000,'EUR',4.6458,18583.2,0,0,0,0),(5,3,1,'Service',1000,'EUR',4.6458,4645.8,19,882.702,0,0);
 /*!40000 ALTER TABLE `invoices-details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,7 +364,9 @@ CREATE TABLE `owners` (
   `contactPhone` varchar(100) DEFAULT NULL,
   `contactEmail` varchar(200) DEFAULT NULL,
   `currencies` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `owener_company_idx` (`companyId`),
+  CONSTRAINT `owener_company` FOREIGN KEY (`companyId`) REFERENCES `companies` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -360,7 +376,7 @@ CREATE TABLE `owners` (
 
 LOCK TABLES `owners` WRITE;
 /*!40000 ALTER TABLE `owners` DISABLE KEYS */;
-INSERT INTO `owners` VALUES (1,1,'200 RON','0','/upload/stamp-1.jpg','/upload/logo-1.png',1,'2458963','bogdanim36@gmail.com','RON,EUR');
+INSERT INTO `owners` VALUES (1,1,'200 RON','19','/upload/stamp-1.jpg','/upload/logo-1.png',1,'2458963','test@gmail.com','RON,EUR');
 /*!40000 ALTER TABLE `owners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -397,7 +413,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'bogdanim36@gmail.com',1,'Ionescu','Bogdan-Mihai','Bogdan-Mihai Ionescu',' Ionescu','b91ae7e6-9940-4dfe-8681-9b6aa4cf1a6d',0,'1630608293131','RK','039328','Bucuresti, Sector 2','2017-02-09');
+INSERT INTO `users` VALUES (1,'bogdanim36@gmail.com',1,'Dragos','Popescu','Popescu Dragos',' Dragos','b91ae7e6-9940-4dfe-8681-9b6aa4cf1a6d',1,'2135136217624','JR','033428','Bucuresti, Sector 1','2015-12-03');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,8 +429,10 @@ CREATE TABLE `users-pw` (
   `userId` int(11) NOT NULL,
   `password` varchar(30) DEFAULT NULL,
   `failedLogin` int(11) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `pass_users_fk_idx` (`userId`),
+  CONSTRAINT `pass_users_fk` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -423,7 +441,7 @@ CREATE TABLE `users-pw` (
 
 LOCK TABLES `users-pw` WRITE;
 /*!40000 ALTER TABLE `users-pw` DISABLE KEYS */;
-INSERT INTO `users-pw` VALUES (20,1,'test',0),(21,2,'test',0);
+INSERT INTO `users-pw` VALUES (20,1,'test',0);
 /*!40000 ALTER TABLE `users-pw` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -436,4 +454,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-17  8:49:07
+-- Dump completed on 2018-12-22  6:57:32

@@ -79,6 +79,10 @@ class axTableCustomCtrl {
 
 	}
 
+	loadDataCallback(response) {
+
+	}
+
 	getChildrenDatasources(childrenData) {
 
 	}
@@ -118,6 +122,7 @@ class axTableEditorCustomCtrl {
 	enabledExport() {
 		return true;
 	}
+
 	enabledExportEmail() {
 		return false;
 	}

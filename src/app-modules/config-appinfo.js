@@ -14,6 +14,8 @@ if (typeof window === 'undefined') {
 	let origin = window.origin;
 	if (origin === "http://192.168.1.10:4001") type = "LIVE";
 	else if (origin === "http://bogdanim36.asuscomm.com:5019") type = "Demo";
+	else if (origin === "http://invoicing.demo.spark36.net") type = "Demo";
+	else if (origin === "https://invoicing.demo.spark36.net") type = "Demo";
 	else type = el.getAttribute('content');
 	applicationInfo.type = type;
 	applicationInfo.themes = themes;

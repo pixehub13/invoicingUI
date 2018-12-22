@@ -1,8 +1,10 @@
 (function () {
 	angular.module("App").controller("invoicesCodeCtrl", controller);
-	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataSet", "axDataStore", "axApiAction"];
+	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataSet", "axDataStore", "axApiAction", "$element"];
 
-	function controller($scope, $adapter, $timeout, dataSet, axDataStore,apiAction) {
+	function controller($scope, $adapter, $timeout, dataSet, axDataStore,apiAction, $element) {
+		$scope.loader = axDataStore.loader("#right-pane");
+		$scope.$element = $element;
 		$scope.dataStore = axDataStore;
 		$scope.dataSet = dataSet;
 		$scope.invoices = invoicesClass.dataTable($adapter, $scope);

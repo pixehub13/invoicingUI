@@ -1,8 +1,10 @@
 (function () {
 	angular.module("App").controller("countriesCtrl", controller);
-	controller.$inject = ['$scope', "axDataAdapter", "axDataStore"];
+	controller.$inject = ['$scope', "axDataAdapter", "axDataStore", "$element"];
 
-	function controller($scope, $adapter, axDataStore) {
+	function controller($scope, $adapter, axDataStore,$element) {
+		$scope.loader = axDataStore.loader("#right-pane");
+		$scope.$element = $element;
 		$scope.dataStore = axDataStore;
 		if (!$scope.$parent.launcher) $scope.$parent.launcher = {openFinish: false};
 		$scope.editingMode = $scope.$parent.launcher ? "popup" : ($scope.$parent.$ctrl && $scope.$parent.$ctrl.attributes && $scope.$parent.$ctrl.attributes.config.includes("$$editor.form") ? "editor" : "page");

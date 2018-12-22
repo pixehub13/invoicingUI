@@ -395,6 +395,7 @@ class axTableEditor {
 						$controller.$$grid.$$editor.position = $controller.$dataStore.isMobileDevice ? "over" : ($controller.$$grid.$$editor.position || $controller.element.editorDef.getAttribute("position"));
 						$controller.$$grid.$$editor.refreshForm();
 						$controller.$$grid.$$editor.initialized = true;
+						$controller.$$grid.$$table.removeViewLoader.call($controller.$$grid.$$table, true);
 						//console.log("on init done", $controller.$$grid.$$editor.position );
 					}
 				},

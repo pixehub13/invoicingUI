@@ -1,4 +1,4 @@
-<div ng-controller="invoicesCodeCtrl">
+<div ng-controller="invoicesCodeCtrl" style="visibility: hidden">
 	<style>
 		ax-table-editor.invoice-editor ax-form td[column-index='1'][role=label] {
 			padding-left: 10px
@@ -458,6 +458,10 @@
 						  show-in-editor="true"
 						  width="100px">
 				<ax-column-filter filter-type="text" show-in-popup></ax-column-filter>
+				<ax-column-edit edit-type="dropdown-list"
+									 datasource="$ctrl.$parent.dataSet.currencies.items"
+									 item-id-field="id"
+				></ax-column-edit>
 			</ax-column>
 			<ax-column header="trans:Customer"
 						  bind-to="customerId"

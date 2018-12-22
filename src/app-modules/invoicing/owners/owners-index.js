@@ -1,8 +1,11 @@
 (function () {
 	angular.module("App").controller("ownersCtrl", controller);
-	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataStore", "$element", "Upload", "guidGenerator", "axDataSet"];
+	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataStore", "$element", "Upload", "guidGenerator", "axDataSet", "$element"];
 
 	function controller($scope, $adapter, $timeout, axDataStore, $element, Upload, guidGenerator, dataSet) {
+		$scope.loader = axDataStore.loader("#right-pane");
+		$scope.$element = $element;
+
 		$scope.dataStore = axDataStore;
 		$scope.dataSet = dataSet;
 		$scope.editingMode = $scope.$parent.launcher ? "popup" : ($scope.$parent.$ctrl && $scope.$parent.$ctrl.attributes && $scope.$parent.$ctrl.attributes.config.includes("$$editor.form") ? "editor" : "page");

@@ -1,8 +1,11 @@
 (function () {
 	angular.module("App").controller("companiesCtrl", controller);
-	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataSet", "axDataStore"];
+	controller.$inject = ['$scope', "axDataAdapter", "$timeout", "axDataSet", "axDataStore", "$element"];
 
-	function controller($scope, $adapter, $timeout, dataSet, axDataStore) {
+	function controller($scope, $adapter, $timeout, dataSet, axDataStore, $element) {
+		$scope.loader = axDataStore.loader("#right-pane");
+		$scope.$element = $element;
+
 		$scope.dataStore = axDataStore;
 		if (!$scope.$parent.launcher) $scope.$parent.launcher = {openFinish: false};
 		$scope.dataSet = dataSet;

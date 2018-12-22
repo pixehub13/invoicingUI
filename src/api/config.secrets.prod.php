@@ -1,8 +1,8 @@
 <?php
 $dbConfig = array(
-	"dbName" => "invoicing-demo",
-	"user" => "invoicing-demo",
-	"password" => "generic8iNbR7",
+	"dbName" => "sparknet_invoicing-demo",
+	"user" => "sparknet_inv-dem",
+	"password" => "FB,Cj&@5Q^6&",
 	"driver" => "Mysqli",
 	"host" => "localhost");
 $email = array(

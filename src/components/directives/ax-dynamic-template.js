@@ -21,16 +21,18 @@
 	};
 	angular.module("App").directive('bindHtmlCompile', ["$compile", axDynamicTemplate]);
 	angular.module("App").directive('axDynamicTemplate', ["$compile", axDynamicTemplate]);
-	angular.module("App").directive('axDynamicTemplateUrl', ["$compile", "templateFactory", function ($compile, templateFactory) {
+	angular.module("App").directive('axDynamicTemplateUrl', ["$compile", "templateFactory", "$timeout", function ($compile, templateFactory, $timeout) {
 		return {
 			restrict: 'A',
 			replace: true,
 			link: function (scope, element, attrs) {
+				element.parent("visibility", "hidden");
 				var callBack = function (htmlReceived) {
 					var compileScope = attrs.axDynamicTemplateScope ? scope.$eval(attrs.axDynamicTemplateScope) : scope;
 					// console.log("compile", attrs.axDynamicTemplateUrl);
 					element.html(htmlReceived || "");
 					$compile(element.contents())(compileScope);
+					element.parent("visibility", "visible");
 				};
 
 				if (attrs.axDynamicTemplateUrl) {
